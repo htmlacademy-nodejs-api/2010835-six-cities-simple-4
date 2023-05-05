@@ -11,23 +11,25 @@ export class ConsoleLogger implements LoggerInterface{
 
   public log(): void{
     this.dataToLog.forEach((data) => {
-      console.log(chalk.red(data.title));
-      console.log(data.description);
-      console.log(data.date);
-      console.log(data.previewImageSrc);
-      console.log(data.offerImageSrc);
-      console.log(chalk.bgMagentaBright(data.isPremium));
-      console.log(data.isFavorite);
-      console.log(data.rate);
-      console.log(data.estateType);
-      console.log(chalk.green(data.image));
-      console.log(chalk.green(data.roomsQuantity));
-      console.log(data.guestQuantity);
-      console.log(chalk.grey(data.price));
-      console.log(data.goods);
-      console.log(chalk.bgCyan(data.hostEmail));
-      console.log(data.commentsQuantity);
-      console.log(data.location);
+      console.log(`\n${chalk.bold.redBright('///*********************************///')}\n`);
+      console.log(`Title: ${chalk.bold.cyan(data.title)}`);
+      console.log(`Description: ${chalk.yellow(data.description)}`);
+      console.log(`Date ${chalk.green(data.date)}`);
+      console.log(`Preview image source: ${chalk.green(data.previewImageSrc)}`);
+      console.log(`Offer image source: ${chalk.green(data.offerImageSrc.join(', '))}`);
+      console.log(`Is premium: ${chalk.cyan(data.isPremium)}`);
+      console.log(`Is favorite: ${chalk.cyan(data.isFavorite)}`);
+      console.log(`Rate: ${chalk.green(data.rate)}`);
+      console.log(`Estate type: ${chalk.green(data.estateType)}`);
+      console.log(`Image source: ${chalk.green(data.image)}`);
+      console.log(`Number of rooms: ${chalk.yellowBright(data.roomsQuantity)}`);
+      console.log(`Number of guests: ${chalk.yellowBright(data.guestQuantity)}`);
+      console.log(`Price: ${chalk.red(data.price)}`);
+      console.log(`Goods: ${chalk.green(data.goods.join(', '))}`);
+      console.log(`Host email: ${chalk.green(data.hostEmail)}`);
+      console.log(`Number of comments: ${chalk.yellowBright(data.commentsQuantity)}`);
+      console.log(`Location: latitude - ${chalk.yellow(data.location.latitude)}, longitude - ${chalk.yellow(data.location.longitude)}`);
+      console.log('\n');
     });
   }
 }
