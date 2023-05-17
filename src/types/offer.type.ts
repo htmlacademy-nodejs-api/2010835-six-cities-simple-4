@@ -12,7 +12,6 @@ export type Offer = {
   isFavorite: boolean,
   rate: number,
   estateType: EstateType,
-  image: string;
   roomsQuantity: number,
   guestQuantity: number,
   price: number,

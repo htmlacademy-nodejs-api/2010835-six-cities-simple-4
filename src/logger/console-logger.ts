@@ -21,7 +21,6 @@ export class ConsoleLogger implements LoggerInterface{
       console.log(`Is favorite: ${chalk.cyan(data.isFavorite)}`);
       console.log(`Rate: ${chalk.green(data.rate)}`);
       console.log(`Estate type: ${chalk.green(data.estateType)}`);
-      console.log(`Image source: ${chalk.green(data.image)}`);
       console.log(`Number of rooms: ${chalk.yellowBright(data.roomsQuantity)}`);
       console.log(`Number of guests: ${chalk.yellowBright(data.guestQuantity)}`);
       console.log(`Price: ${chalk.red(data.price)}`);

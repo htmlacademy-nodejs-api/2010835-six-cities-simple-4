@@ -22,7 +22,7 @@ export default class TSVFileReader implements FileReaderInterface {
       .split('\n')
       .filter((row) => row.trim() !== '')
       .map((line) => line.split('\t'))
-      .map(([title, description, date, city, previewImageSrc, offerImageSrc, isPremium, isFavorite, rate, estateType, image, roomsQuantity, guestQuantity, price, goods, hostEmail, commentsQuantity, location]) => ({
+      .map(([title, description, date, city, previewImageSrc, offerImageSrc, isPremium, isFavorite, rate, estateType, roomsQuantity, guestQuantity, price, goods, hostEmail, commentsQuantity, location]) => ({
         title,
         description,
         date: new Date(date),
@@ -33,7 +33,6 @@ export default class TSVFileReader implements FileReaderInterface {
         isFavorite: isFavorite.toLowerCase() === 'true',
         rate: Number(rate),
         estateType: EstateType[(estateType as keyof typeof EstateType)],
-        image,
         roomsQuantity: Number(roomsQuantity),
         guestQuantity: Number(guestQuantity),
         price: Number(price),
