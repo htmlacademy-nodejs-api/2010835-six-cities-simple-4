@@ -1,45 +1,41 @@
-import { readFileSync } from 'node:fs';
-import { EstateType } from '../../types/estate-type.enum.js';
+import { createReadStream } from 'node:fs';
 import { FileReaderInterface } from './file-reader.interface.js';
-import { Location } from '../../types/location.type.js';
-import { Offer } from '../../types/offer.type.js';
+import EventEmitter from 'node:events';
 
-export default class TSVFileReader implements FileReaderInterface {
-  private rawData = '';
+const CHUNK_SIZE = 16384; // 16KB
 
-  constructor(public filename: string) { }
+export default class TSVFileReader extends EventEmitter implements FileReaderInterface {
+  public filename: string;
 
-  public read(): void {
-    this.rawData = readFileSync(this.filename, { encoding: 'utf8' });
+  constructor(filename: string){
+    super();
+    this.filename = filename;
   }
 
-  public toArray(): Offer[] {
-    if (!this.rawData) {
-      return [];
+  public async read(): Promise<void> {
+    const stream = createReadStream(this.filename, {
+      highWaterMark: CHUNK_SIZE,
+      encoding: 'utf-8',
+    });
+
+
+    let remainingData = '';
+    let nextLinePosition = -1;
+    let importedRowCount = 0;
+
+    for await (const chunk of stream) {
+      remainingData += chunk.toString();
+
+      while ((nextLinePosition = remainingData.indexOf('\n')) >= 0) {
+        const completeRow = remainingData.slice(0, nextLinePosition + 1);
+        remainingData = remainingData.slice(++nextLinePosition);
+        importedRowCount++;
+
+        this.emit('line', completeRow);
+      }
     }
 
-    return this.rawData
-      .split('\n')
-      .filter((row) => row.trim() !== '')
-      .map((line) => line.split('\t'))
-      .map(([title, description, date, city, previewImageSrc, offerImageSrc, isPremium, isFavorite, rate, estateType, roomsQuantity, guestQuantity, price, goods, hostEmail, commentsQuantity, location]) => ({
-        title,
-        description,
-        date: new Date(date),
-        city,
-        previewImageSrc,
-        offerImageSrc: offerImageSrc.split(';'),
-        isPremium: isPremium.toLowerCase() === 'true',
-        isFavorite: isFavorite.toLowerCase() === 'true',
-        rate: Number(rate),
-        estateType: EstateType[(estateType as keyof typeof EstateType)],
-        roomsQuantity: Number(roomsQuantity),
-        guestQuantity: Number(guestQuantity),
-        price: Number(price),
-        goods: goods.split(';'),
-        hostEmail,
-        commentsQuantity: Number(commentsQuantity),
-        location: ({latitude: Number(location.split(';')[0]), longitude: Number(location.split(';')[1])} as Location)
-      }));
+    this.emit('end', importedRowCount);
+
   }
 }

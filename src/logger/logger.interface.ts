@@ -1,3 +1,5 @@
+import { Offer } from '../types/offer.type.js';
+
 export interface LoggerInterface{
-  log() : void;
+  log(data: Offer) : void;
 }

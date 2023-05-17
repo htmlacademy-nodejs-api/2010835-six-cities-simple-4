@@ -3,7 +3,7 @@ import axios, { AxiosResponse } from 'axios';
 import { CliCommandInterface } from './cli-command.interface.js';
 import { MockDataSource } from '../../types/mock-data-server-response.js';
 import MockOfferCreator from '../../modules/mock-offer-generator.js';
-import { appendFile } from 'node:fs/promises';
+import TSVFileWriter from '../file-writer/tsv-file-writer.js';
 
 export default class GenerateCommand implements CliCommandInterface {
   public readonly name;
@@ -19,8 +19,10 @@ export default class GenerateCommand implements CliCommandInterface {
 
     await this.requestMockDataSource(url);
 
+    const tsvFileWriter = new TSVFileWriter(filepath);
+
     for (let i = 0; i < offerQuantity; i++) {
-      await appendFile(filepath, `${MockOfferCreator.create(this.mockDataSource)}\n`, 'utf8');
+      await tsvFileWriter.write(`${MockOfferCreator.create(this.mockDataSource)}`);
     }
 
     console.log(`File ${filepath} was created!`);
