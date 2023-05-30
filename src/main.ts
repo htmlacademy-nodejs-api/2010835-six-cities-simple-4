@@ -1,15 +1,22 @@
-#!/usr/bin/env node
+import 'reflect-metadata';
+import { Container } from 'inversify';
+import { RestApplication } from './app/rest-application.js';
+import { PinoLoggerService } from './core/services/logger/pino-logger.service.js';
+import { LoggerInterface } from './core/services/logger/logger.interface.js';
+import { ApplicationComponent } from './types/application-component.type.js';
+import { ConfigService } from './core/services/config/config.service.js';
+import { ConfigInterface } from './core/services/config/config.interface.js';
 
-import { CliApplication } from './app/cli-application.js';
-import process from 'node:process';
-import { HelpCliCommand } from './core/cli-comands/help-command.js';
-import VersionCommand from './core/cli-comands/version-command.js';
-import ImportCommand from './core/cli-comands/import-command.js';
-import GenerateCommand from './core/cli-comands/generate-command.js';
 
+async function bootstrap(){
+  const DIContainer = new Container();
 
-const cliApp = new CliApplication();
+  DIContainer.bind<LoggerInterface>(ApplicationComponent.LoggerInterface).to(PinoLoggerService).inSingletonScope();
+  DIContainer.bind<ConfigInterface>(ApplicationComponent.ConfigService).to(ConfigService).inSingletonScope();
+  DIContainer.bind<RestApplication>(ApplicationComponent.RestApplication).to(RestApplication).inSingletonScope();
 
-cliApp.registerCommands([new HelpCliCommand(), new VersionCommand(), new ImportCommand(), new GenerateCommand()]);
+  const restApplication = DIContainer.get<RestApplication>(ApplicationComponent.RestApplication);
+  await restApplication.init();
+}
 
-cliApp.processCommand(process.argv);
+bootstrap();
