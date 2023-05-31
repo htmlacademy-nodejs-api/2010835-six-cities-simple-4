@@ -5,5 +5,5 @@ export type MockDataSource = {
   imageSrc: string [],
   estateType: string [],
   goods: string [],
-  hostEmail: string [],
+  hostName: string [],
 }

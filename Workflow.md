@@ -102,11 +102,11 @@ npm start ts -- --generate <n> <filepath> <url>
 #### Импортировать в базу данных информацию из tsv-файла
 
 ```bash
-npm start ts -- --import <filepath>
+npm start ts -- --import <filepath> <username> <password> <db-host> <port> <database-name> 
 ```
 
 Импортирует в базу данных информацию из tsv-файла. Путь к файлу передаётся в параметре <filepath>.
-Пример: `npm start ts -- --import ./mock/mock-data.tsv`.
+Пример: `npm start ts -- --import ./mock/mock-data.tsv admin test 127.0.0.1 27017 six-cities`.
 
 #### Запуск REST API сервис
 

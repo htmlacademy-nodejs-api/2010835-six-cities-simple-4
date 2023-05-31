@@ -1,8 +1,8 @@
-import { EstateType } from '../../types/estate-type.enum.js';
-import { Location } from '../../types/location.type';
-import { Offer } from '../../types/offer.type';
+import { EstateType } from '../types/estate-type.enum.js';
+import { Location } from '../types/location.type.js';
+import { MockDataObject } from '../types/mock-data-object.type.js';
 
-export function createOffer(offerData: string): Offer {
+export function parseMockData(offerData: string): MockDataObject {
   const [
     title,
     description,
@@ -18,7 +18,7 @@ export function createOffer(offerData: string): Offer {
     guestQuantity,
     price,
     goods,
-    hostEmail,
+    hostName,
     commentsQuantity,
     location
   ] = offerData.replace('\n', '').split('\t');
@@ -40,7 +40,9 @@ export function createOffer(offerData: string): Offer {
     guestQuantity: Number(guestQuantity),
     price: Number(price),
     goods: goods.split(';'),
-    hostEmail,
+    hostName,
+    hostEmail: `${hostName.toLowerCase().replace(' ', '-')}@fakemail.com`,
+    hostAvatar: `${hostName.toLowerCase().replace(' ', '-')}.png`,
     commentsQuantity: Number(commentsQuantity),
     location: {longitude: parseFloat(longitude), latitude: parseFloat(latitude)} as Location,
   };

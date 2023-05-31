@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+import 'reflect-metadata';
 import { CliApplication } from './app/cli-application.js';
 import process from 'node:process';
 import { HelpCliCommand } from './core/cli-comands/help-command.js';

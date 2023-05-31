@@ -49,14 +49,16 @@
       "Towels",
       "Fridge"
     ],
-    "hostEmail": [
-      "john_doe@fakemail.com",
-      "anton_bendos@fakemail.com",
-      "vlad_tepeș@fakemail.com",
-      "davie_jones@fakemail.com",
-      "jessy_pinkman@fakemail.com",
-      "lara_croft@fakemail.com",
-      "judy_doe@fakemail.com"
+    "hostName": [
+      "Kuznecova Angelina",
+      "Samsonova Polina",
+      "Tsareva Aleksandra",
+      "Efimov Victor",
+      "Nikolaev Artem",
+      "Arhipov Ivan",
+      "Shilova Eugenia",
+      "Volkov Nikita",
+      "Ustinova Alina"
     ]
   }
 }
