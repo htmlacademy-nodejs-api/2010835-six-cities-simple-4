@@ -39,7 +39,7 @@ export default class MockOfferCreator{
     const guestsQuantity = String(generateRandomValue(MIN_GUESTS_QUANTITY, MAX_GUESTS_QUANTITY));
     const price = String(generateRandomValue(MIN_PRICE, MAX_PRICE));
     const goods = getRandomItems(mockDataSource.goods).join(';');
-    const hostEmail = getRandomItem(mockDataSource.hostEmail);
+    const hostName = getRandomItem(mockDataSource.hostName);
     const commentsQuantity = String(generateRandomValue(MIN_COMMENTS_QUANTITY, MAX_COMMENTS_QUANTITY));
 
     const cityLocation = this.generateLocation(city, LOCATION_RADIUS_LIMIT_IN_KILOMETERS);
@@ -61,7 +61,7 @@ export default class MockOfferCreator{
       guestsQuantity,
       price,
       goods,
-      hostEmail,
+      hostName,
       commentsQuantity,
       location
     ].join('\t');
