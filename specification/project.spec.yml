@@ -1,0 +1,610 @@
+openapi: "3.0.2"
+info:
+  title: API сервер для демо-проекта «Шесть городов».
+  description: |-
+    * Список ресурсов и маршрутов сервера «Шесть городов».
+  version: "1.0"
+servers:
+  - url: https://api.six-cities.test/v1
+tags:
+  - name: offers
+    description: Действия с объявлениями.
+  - name: comments
+    description: Действия с комментариями.
+  - name: users
+    description: Действия с пользователем.
+paths:
+  /users/register:
+    #РЕГИСТРАЦИЯ НОВОГО ПОЛЬЗОВАТЕЛЯ
+    post:
+      requestBody:
+        description: Данные для создания нового пользователя
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/createUser"
+        required: true
+      responses:
+        "200":
+          description: Пользователь зарегистрирован. Объект пользователя.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/user"
+        "409":
+          description: Пользователь с таким именем уже существует
+      tags:
+        - users
+      summary: Регистрация пользователя
+      description: Регистрирует нового пользователя.
+
+  #ЛОГИН
+  /users/login:
+    #ВХОД В ЗАКРЫТУЮ ЧАСТЬ ПРИЛОЖЕНИЯ
+    post:
+      requestBody:
+        description: Данные для входа в закрытую часть приложения.
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/loginUser"
+        required: true
+      responses:
+        "200":
+          description: Пользователь авторизован
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/user"
+        "401":
+          description: Авторизационные данные не верны
+      tags:
+        - users
+      summary: Авторизация пользователя
+      description: Авторизует пользователя на основе логина и пароля
+    #ПРОВЕРКА СОСТОЯНИЯ ПОЛЬЗОВАТЕЛЯ
+    get:
+      security:
+        - X-token: []
+      responses:
+        "200":
+          description: Пользователь авторизован
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/user"
+        "401":
+          description: Авторизационные данные не верны
+      tags:
+        - users
+      summary: Проверка состояния пользователя
+      description: Возвращает информацию по авторизованному пользователю
+
+  /users/{userId}/avatar:
+    #ЗАГРУЗКА АВАТАРА ПОЛЬЗОВАТЕЛЯ
+    post:
+      responses:
+        "200":
+          description: OK
+      tags:
+        - users
+      summary: Загрузить изображение аватара
+      description: Загружает изображение аватара пользователя. Изображение
+        аватара должно быть в формате `png` или `jpg`.
+
+  ####OFFERS####
+  #OFFERS/
+  /offers:
+    #ПОЛУЧЕНИЕ СПИСКА ПРЕДЛОЖЕНИЙ ПО АРЕНДЕ
+    get:
+      responses:
+        "200":
+          description: Предложения получены. Массив объектов предложений.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/offers"
+      tags:
+        - offers
+      summary: Получение списка предложений.
+      description: По умолчанию возвращает не больше 60 предложений по аренде, отсортированных по дате публикации.
+
+  #OFFERS/CREATE
+  /offers/create:
+    #СОЗДАНИЕ НОВОГО ПРЕДЛОЖЕНИЯ
+    post:
+      security:
+        - X-token: []
+      requestBody:
+        description: Данные для создания нового предложения.
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/createOffer"
+        required: true
+
+      responses:
+        "200":
+          description: Предложение созданно. Объект предложения.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/offer"
+      tags:
+        - offers
+      summary: Создание нового предложения.
+      description: Создаёт новое предложение.
+
+  #/OFFERS/{OFFERID}
+  /offers/{offerId}:
+    parameters:
+      - name: offerId
+        in: path
+        required: true
+        description: Идентификатор предложения.
+        schema:
+          type: string
+          example: 634edaad99c4e1643aa25b93
+    #ПОЛУЧЕНИЕ ИНФОРМАЦИИ О ПРЕДЛОЖЕНИИ
+    get:
+      tags:
+        - offers
+      summary: Получение детальной информации о предложении.
+      description: Предоставляет объект с информацией о предложении.
+
+      responses:
+        "200":
+          description: Получен объект с данными о предложении.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/offer"
+    #РЕДАКТИРОВАНИЕ ПРЕДЛОЖЕНИЯ
+    patch:
+      security:
+        - X-token: []
+      requestBody:
+        description: Данные для редактирования предложения.
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/updateOffer"
+        required: true
+      responses:
+        "200":
+          description: Предложение отредактированно.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/offer"
+      tags:
+        - offers
+      summary: Редактирование предложения.
+      description: Редактирует предложение.
+    #УДАЛЕНИЕ ПРЕДЛОЖЕНИЯ
+    delete:
+      tags:
+        - offers
+      summary: Удаление предложения.
+      description: Удаляет объект с информацией о предложении.
+      responses:
+        "200":
+          description: Предложение успешно удалено.
+
+  ####COMMENTS####
+  #/comments
+  /comments:
+    #ПОЛУЧЕНИЕ СПИСКА КОММЕНТАРИЕВ ДЛЯ ПРЕДЛОЖЕНИЯ
+    get:
+      tags:
+        - comments
+      summary: Получение списка комментариев для предложения.
+      description: Получение списка комментариев для предложения на основе id предложения.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/getCommentsByOfferId"
+
+      responses:
+        "200":
+          description: Получен список комментариев
+          content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/comments'
+
+    #ДОБАВЛЕНИЕ КОММЕНТАРИЯ ДЛЯ ПРЕДЛОЖЕНИЯ
+    post:
+      tags:
+        - "comments"
+      security:
+        - X-token: []
+      summary: Добавление комментария для предложения.
+      requestBody:
+        description: Данные для создания нового комментария
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/createComment"
+        required: true
+      responses:
+        "200":
+          description: Комментарий создан. Объект комментарий.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/comment"
+        "401":
+          description: Пользователь не авторизован
+
+components:
+  securitySchemes:
+    X-token:
+      type: apiKey
+      in: header
+      name: X-token
+  schemas:
+    ####USER####
+    createUser:
+      type: object
+      properties:
+        name:
+          type: string
+          example: Karl Marx
+        email:
+          type: string
+          example: user@email.ru
+        avatar:
+          type: string
+          example: avatar.jpg
+        password:
+          type: string
+          example: 17ec!qw6Fb#
+        userRang:
+          type: string
+          example: DEFAULT
+
+    user:
+      type: object
+      properties:
+        name:
+          type: string
+          example: Karl Marx
+        email:
+          type: string
+          example: user@email.ru
+        avatar:
+          type: string
+          example: avatar.jpg
+        userRang:
+          type: string
+          example: DEFAULT
+
+    loginUser:
+      type: object
+      properties:
+        email:
+          type: string
+          example: user@email.ru
+        password:
+          type: string
+          example: 17ec!qw6Fb#
+
+    ####OFFER####
+    createOffer:
+      type: object
+
+      properties:
+        title:
+          type: string
+          example: "Wood and stone place"
+        description:
+          type: string
+          example: "A quiet cozy and picturesque that hides behind a river by the unique lightness of Amsterdam."
+        city:
+          type: string
+          example: "Brussels"
+        previewImageSrc:
+          type: string
+          example: "./img/mockimage.png"
+        offerImageSrc:
+          type: object
+          example:
+            [
+              "./img/mockimage_1.png",
+              "./img/mockimage_2.png",
+              "./img/mockimage_3.png",
+              "./img/mockimage_4.png",
+              "./img/mockimage_5.png",
+              "./img/mockimage_6.png",
+            ]
+        isPremium:
+          type: boolean
+          example: true
+        isFavorite:
+          type: boolean
+          example: false
+        rate:
+          type: number
+          example: 4.5
+        estateType:
+          type: string
+          example: apartment
+        roomQuantity:
+          type: number
+          example: 5
+        guestQuantity:
+          type: number
+          example: 5
+        price:
+          type: number
+          example: 10000
+        goods:
+          type: object
+          example: ["Fridge", "Towels", "Dishwasher"]
+        userId:
+          type: string
+          example: 634edaad99c4e1643aa25b91
+        location:
+          type: object
+          example: { "latitude": 50.938361, "longitude": 6.959974 }
+
+    updateOffer:
+      type: object
+
+      properties:
+        title:
+          type: string
+          example: "Wood and stone place"
+        description:
+          type: string
+          example: "A quiet cozy and picturesque that hides behind a river by the unique lightness of Amsterdam."
+        city:
+          type: string
+          example: "Brussels"
+        previewImageSrc:
+          type: string
+          example: "./img/mockimage.png"
+        offerImageSrc:
+          type: object
+          example:
+            [
+              "./img/mockimage_1.png",
+              "./img/mockimage_2.png",
+              "./img/mockimage_3.png",
+              "./img/mockimage_4.png",
+              "./img/mockimage_5.png",
+              "./img/mockimage_6.png",
+            ]
+        isPremium:
+          type: boolean
+          example: true
+        isFavorite:
+          type: boolean
+          example: false
+        rate:
+          type: number
+          example: 4.5
+        estateType:
+          type: string
+          example: apartment
+        roomQuantity:
+          type: number
+          example: 5
+        guestQuantity:
+          type: number
+          example: 5
+        price:
+          type: number
+          example: 10000
+        goods:
+          type: object
+          example: ["Fridge", "Towels", "Dishwasher"]
+        userId:
+          type: string
+          example: 634edaad99c4e1643aa25b91
+        location:
+          type: object
+          example: { "latitude": 50.938361, "longitude": 6.959974 }
+
+    offer:
+      type: object
+
+      properties:
+        title:
+          type: string
+          example: "Wood and stone place"
+        description:
+          type: string
+          example: "A quiet cozy and picturesque that hides behind a river by the unique lightness of Amsterdam."
+        city:
+          type: string
+          example: "Brussels"
+        createdAt:
+          type: string
+          example: "2022-12-01T12:00:00.000Z"
+        updatedAt:
+          type: string
+          example: "2022-12-03T12:00:00.000Z"
+        previewImageSrc:
+          type: string
+          example: "./img/mockimage.png"
+        offerImageSrc:
+          type: object
+          example:
+            [
+              "./img/mockimage_1.png",
+              "./img/mockimage_2.png",
+              "./img/mockimage_3.png",
+              "./img/mockimage_4.png",
+              "./img/mockimage_5.png",
+              "./img/mockimage_6.png",
+            ]
+        isPremium:
+          type: boolean
+          example: true
+        isFavorite:
+          type: boolean
+          example: false
+        rate:
+          type: number
+          example: 4.5
+        estateType:
+          type: string
+          example: apartment
+        roomQuantity:
+          type: number
+          example: 5
+        guestQuantity:
+          type: number
+          example: 5
+        price:
+          type: number
+          example: 10000
+        goods:
+          type: object
+          example: ["Fridge", "Towels", "Dishwasher"]
+        userId:
+          type: string
+          example: 634edaad99c4e1643aa25b91
+        location:
+          type: object
+          example: { "latitude": 50.938361, "longitude": 6.959974 }
+
+    offers:
+      type: array
+      items:
+        type: object
+        properties:
+          title:
+            type: string
+            example: "Wood and stone place"
+          description:
+            type: string
+            example: "A quiet cozy and picturesque that hides behind a river by the unique lightness of Amsterdam."
+          city:
+            type: string
+            example: "Brussels"
+          createdAt:
+            type: string
+            example: "2022-12-01T12:00:00.000Z"
+          updatedAt:
+            type: string
+            example: "2022-12-03T12:00:00.000Z"
+          previewImageSrc:
+            type: string
+            example: "./img/mockimage.png"
+          offerImageSrc:
+            type: object
+            example:
+              [
+                "./img/mockimage_1.png",
+                "./img/mockimage_2.png",
+                "./img/mockimage_3.png",
+                "./img/mockimage_4.png",
+                "./img/mockimage_5.png",
+                "./img/mockimage_6.png",
+              ]
+          isPremium:
+            type: boolean
+            example: true
+          isFavorite:
+            type: boolean
+            example: false
+          rate:
+            type: number
+            example: 4.5
+          estateType:
+            type: string
+            example: apartment
+          roomQuantity:
+            type: number
+            example: 5
+          guestQuantity:
+            type: number
+            example: 5
+          price:
+            type: number
+            example: 10000
+          goods:
+            type: object
+            example: ["Fridge", "Towels", "Dishwasher"]
+          userId:
+            type: string
+            example: 634edaad99c4e1643aa25b91
+          location:
+            type: object
+            example: { "latitude": 50.938361, "longitude": 6.959974 }
+
+    ####COMMENT####
+    createComment:
+      type: object
+
+      properties:
+        userId:
+          type: string
+          example: 634edaad99c4e1643aa25b91
+        offerId:
+            type: string
+            example: 634edaad99c4e1643aa25b91
+        textContent:
+          type: string
+          example: Discerning travellers and Wes Anderson fans will luxuriate in the glorious Mittel-European kitsch of one of the director's funniest and most exquisitely designed movies in years.
+        rate:
+          type: number
+          example: 4.5
+
+    comment:
+      type: object
+
+      properties:
+        createdAt:
+          type: string
+          example: "2022-12-01T12:00:00.000Z"
+        updatedAt:
+            type: string
+            example: "2022-12-03T12:00:00.000Z"
+        userId:
+          type: string
+          example: 634edaad99c4e1643aa25b91
+        offerId:
+            type: string
+            example: 634edaad99c4e1643aa25b91
+        textContent:
+          type: string
+          example: Discerning travellers and Wes Anderson fans will luxuriate in the glorious Mittel-European kitsch of one of the director's funniest and most exquisitely designed movies in years.
+        rate:
+          type: number
+          example: 4.5
+
+    comments:
+      type: array
+      items:
+        properties:
+          createdAt:
+            type: string
+            example: "2022-12-01T12:00:00.000Z"
+          updatedAt:
+            type: string
+            example: "2022-12-03T12:00:00.000Z"
+          userId:
+            type: string
+            example: 634edaad99c4e1643aa25b91
+          offerId:
+              type: string
+              example: 634edaad99c4e1643aa25b91
+          textContent:
+            type: string
+            example: Discerning travellers and Wes Anderson fans will luxuriate in the glorious Mittel-European kitsch of one of the director's funniest and most exquisitely designed movies in years.
+          rate:
+            type: number
+            example: 4.5
+
+    getCommentsByOfferId:
+      type: object
+
+      properties:
+        offerId:
+          type: string
+          example: 634edaad99c4e1643aa25b91
