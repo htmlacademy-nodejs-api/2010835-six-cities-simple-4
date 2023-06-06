@@ -1,4 +1,4 @@
-import { UserRang } from '../../types/user-rang.enum.js';
+import { UserRang } from '../../../types/user-rang.enum.js';
 
 export class UpdateUserDto{
   public name?: string;

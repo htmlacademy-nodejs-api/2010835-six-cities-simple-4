@@ -17,6 +17,5 @@ export type Offer = {
   price: number,
   goods: string[],
   hostEmail: string,
-  commentsQuantity: number,
   location: Location,
 }

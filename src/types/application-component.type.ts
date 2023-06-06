@@ -7,4 +7,5 @@ export const ApplicationComponent = {
   OfferDbInterface: Symbol.for('OfferDbInterface'),
   UserModel: Symbol.for('UserModel'),
   OfferModel: Symbol.for('OfferModel'),
+  CommentModel: Symbol.for('CommentModel')
 } as const;

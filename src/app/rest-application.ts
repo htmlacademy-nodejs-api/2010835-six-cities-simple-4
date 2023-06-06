@@ -1,7 +1,7 @@
 import { inject, injectable } from 'inversify';
-import { LoggerInterface } from '../core/services/logger/logger.interface';
+import { LoggerInterface } from '../modules/logger/logger.interface';
 import { ApplicationComponent } from '../types/application-component.type.js';
-import { ConfigService } from '../core/services/config/config.service.js';
+import { ConfigService } from '../modules/config/config.service.js';
 
 @injectable()
 export class RestApplication {
