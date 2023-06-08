@@ -1,5 +1,5 @@
-import { EstateType } from '../../types/estate-type.enum';
-import { Location } from '../../types/location.type';
+import { EstateType } from '../../../types/estate-type.enum';
+import { Location } from '../../../types/location.type';
 
 export default class CreateOfferDto{
   public title!: string;
@@ -18,6 +18,5 @@ export default class CreateOfferDto{
   public price!: number;
   public goods!: string[];
   public hostEmail!: string;
-  public commentsQuantity!: number;
   public location!: Location;
 }

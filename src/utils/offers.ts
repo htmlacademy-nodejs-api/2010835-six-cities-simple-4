@@ -19,7 +19,6 @@ export function parseMockData(offerData: string): MockDataObject {
     price,
     goods,
     hostName,
-    commentsQuantity,
     location
   ] = offerData.replace('\n', '').split('\t');
 
@@ -43,7 +42,6 @@ export function parseMockData(offerData: string): MockDataObject {
     hostName,
     hostEmail: `${hostName.toLowerCase().replace(' ', '-')}@fakemail.com`,
     hostAvatar: `${hostName.toLowerCase().replace(' ', '-')}.png`,
-    commentsQuantity: Number(commentsQuantity),
     location: {longitude: parseFloat(longitude), latitude: parseFloat(latitude)} as Location,
   };
 }

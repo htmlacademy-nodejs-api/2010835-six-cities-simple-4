@@ -2,8 +2,8 @@ import { inject, injectable } from 'inversify';
 import { ConfigInterface } from './config.interface.js';
 import { ConfigSchema, configSchema } from './config.schema.js';
 import { config } from 'dotenv';
-import { ApplicationComponent } from '../../../types/application-component.type.js';
 import { LoggerInterface } from '../logger/logger.interface.js';
+import { ApplicationComponent } from '../../types/application-component.type.js';
 
 
 @injectable()

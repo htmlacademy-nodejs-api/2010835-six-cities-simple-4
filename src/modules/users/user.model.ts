@@ -1,8 +1,8 @@
 import { defaultClasses, getModelForClass, modelOptions, prop } from '@typegoose/typegoose';
-import { User } from '../../../types/user.type.js';
+import { User } from '../../types/user.type.js';
 import { Types } from 'mongoose';
-import { UserRang } from '../../../types/user-rang.enum.js';
-import { createSHA256 } from '../../../utils/crypto.js';
+import { UserRang } from '../../types/user-rang.enum.js';
+import { createSHA256 } from '../../utils/crypto.js';
 
 
 @modelOptions({

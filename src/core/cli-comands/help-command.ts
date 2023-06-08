@@ -1,15 +1,17 @@
-import { CliCommandInterface } from './cli-command.interface';
+import { CliCommandAbstract } from './cli-command.abstarct.js';
+import { CliCommandInterface } from './cli-command.interface.js';
 
 
-export class HelpCliCommand implements CliCommandInterface {
+export class HelpCliCommand extends CliCommandAbstract implements CliCommandInterface {
   public readonly name: string;
 
   constructor() {
+    super();
     this.name = '--help';
   }
 
   public async execute(..._parameters: string[]): Promise<void> {
-    console.log(`
+    this.logger.info(`
       Программа для подготовки данных для REST API сервера.
       Пример:
           main.js --<command> [--arguments]

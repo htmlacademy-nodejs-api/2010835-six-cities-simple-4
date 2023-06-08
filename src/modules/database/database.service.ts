@@ -1,8 +1,8 @@
 import { inject, injectable } from 'inversify';
 import mongoose from 'mongoose';
-import { ApplicationComponent } from '../../../types/application-component.type.js';
 import { LoggerInterface } from '../logger/logger.interface.js';
 import { DatabaseInterface } from './database.interface.js';
+import { ApplicationComponent } from '../../types/application-component.type.js';
 
 @injectable()
 export class DatabaseService implements DatabaseInterface {
