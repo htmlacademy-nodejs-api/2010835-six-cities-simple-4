@@ -3,7 +3,9 @@ import { Types } from 'mongoose';
 import { Offer } from '../../types/offer.type.js';
 import { EstateType } from '../../types/estate-type.enum.js';
 import { UserEntity } from '../users/user.model.js';
+import { Location } from '../../types/location.type.js';
 
+const DEFAULT_COMMENTS_QUANTITY = 0;
 
 @modelOptions({
   schemaOptions: {
@@ -62,7 +64,10 @@ export class OfferEntity extends defaultClasses.TimeStamps{
   public hostEmail!: string;
 
   @prop()
-  public location!: string;
+  public commentsQuantity!: number;
+
+  @prop()
+  public location!: Location;
 
   constructor(offerData: Offer, userId: string) {
     super();
@@ -82,7 +87,8 @@ export class OfferEntity extends defaultClasses.TimeStamps{
     this.price = offerData.price;
     this.goods = offerData.goods;
     this.hostEmail = offerData.hostEmail;
-    this.location = `${offerData.location.latitude};${offerData.location.longitude}`;
+    this.commentsQuantity = DEFAULT_COMMENTS_QUANTITY;
+    this.location = offerData.location;
   }
 }
 

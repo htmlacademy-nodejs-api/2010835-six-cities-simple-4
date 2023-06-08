@@ -14,11 +14,12 @@ import CreateOfferDto from '../../modules/offers/dto/create-offer.dto.js';
 import { OfferService } from '../../modules/offers/offer.service.js';
 import { UserService } from '../../modules/users/user.service.js';
 import { DatabaseService } from '../../modules/database/database.service.js';
+import { CliCommandAbstract } from './cli-command.abstarct.js';
 
 const DEFAULT_USER_PASSWORD = 'PASSWORD';
 const DEFAULT_SALT = 'SALT';
 
-export default class ImportCommand implements CliCommandInterface {
+export default class ImportCommand extends CliCommandAbstract implements CliCommandInterface {
   public readonly name;
   public logger;
   public database;
@@ -27,11 +28,12 @@ export default class ImportCommand implements CliCommandInterface {
 
 
   constructor() {
+    super();
     this.name = '--import';
     this.logger = new PinoLoggerService();
     this.database = new DatabaseService(this.logger);
-    this.users = new UserService(this.logger, UserModel);
-    this.offers = new OfferService(this.logger, OfferModel);
+    this.users = new UserService(UserModel);
+    this.offers = new OfferService(OfferModel);
 
     this.onLine = this.onLine.bind(this);
     this.onComplete = this.onComplete.bind(this);
@@ -53,7 +55,7 @@ export default class ImportCommand implements CliCommandInterface {
 
   private onComplete(count: number) {
     this.database.disconnect();
-    console.log(`${count} rows imported.`);
+    this.logger.info(`${count} rows imported.`);
   }
 
   public async execute(filename: string, username: string, password: string, host: string, port: string, dbName: string): Promise<void> {
@@ -67,7 +69,7 @@ export default class ImportCommand implements CliCommandInterface {
     try {
       await fileReader.read();
     } catch(err) {
-      console.log(`Can't read the file: ${getErrorMessage(err)}`);
+      this.logger.error(`Can't read the file: ${getErrorMessage(err)}`);
     }
   }
 }

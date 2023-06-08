@@ -1,7 +1,6 @@
 import { inject, injectable } from 'inversify';
-import { types } from '@typegoose/typegoose';
+import { DocumentType, types } from '@typegoose/typegoose';
 import { CommentsServiceInterface } from './comments-service.interface.js';
-import { LoggerInterface } from '../logger/logger.interface.js';
 import { CommentEntity } from './comment.model.js';
 import { ApplicationComponent } from '../../types/application-component.type.js';
 
@@ -10,16 +9,24 @@ import { ApplicationComponent } from '../../types/application-component.type.js'
 export class CommentsService implements CommentsServiceInterface {
 
   constructor(
-    @inject(ApplicationComponent.LoggerInterface) private readonly logger: LoggerInterface,
     @inject(ApplicationComponent.CommentModel) private readonly commentModel : types.ModelType<CommentEntity>,
   ){}
 
-  public async create(comment: CommentEntity): Promise<types.DocumentType<CommentEntity>> {
-    const createdComment = await this.commentModel.create(comment);
+  public async index(offerId: number): Promise<DocumentType<CommentEntity>[]>{
+    const foundComments = await this.commentModel.find({offerId});
 
-    this.logger.info(`Comment with id - ${createdComment._id} was created.`);
+    return foundComments;
+  }
+
+  public async create(comment: CommentEntity): Promise<DocumentType<CommentEntity>> {
+    const createdComment = await this.commentModel.create(comment);
 
     return createdComment;
   }
 
+  public async deleteByOfferId(offerId: string): Promise<number>{
+    const deletedCount = (await this.commentModel.deleteMany({offerId})).deletedCount;
+
+    return deletedCount;
+  }
 }

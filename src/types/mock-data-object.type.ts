@@ -19,6 +19,5 @@ export type MockDataObject = {
   hostEmail: string,
   hostName: string,
   hostAvatar: string,
-  commentsQuantity: number,
   location: Location,
 }

@@ -1,7 +1,6 @@
 import { inject, injectable } from 'inversify';
 import { UserServiceInterface } from './user-service.interface.js';
 import { DocumentType, types } from '@typegoose/typegoose';
-import { LoggerInterface } from '../logger/logger.interface.js';
 import { UserEntity } from './user.model.js';
 import { UpdateUserDto } from './dto/update-user.dto.js';
 import CreateUserDto from './dto/create-user.dto.js';
@@ -12,7 +11,6 @@ import { ApplicationComponent } from '../../types/application-component.type.js'
 export class UserService implements UserServiceInterface{
 
   constructor(
-    @inject(ApplicationComponent.LoggerInterface) private readonly logger: LoggerInterface,
     @inject(ApplicationComponent.UserModel) private readonly userModel : types.ModelType<UserEntity>
   ){}
 
@@ -21,8 +19,6 @@ export class UserService implements UserServiceInterface{
     newUser.setPassword(dto.password, salt);
 
     const createdUser = await this.userModel.create(newUser);
-
-    this.logger.info(`User with id - ${createdUser._id} was created.`);
 
     return createdUser;
   }

@@ -4,12 +4,14 @@ import { CliCommandInterface } from './cli-command.interface.js';
 import { MockDataSource } from '../../types/mock-data-server-response.js';
 import MockOfferCreator from '../../modules/mock-offer-generator.js';
 import TSVFileWriter from '../file-writer/tsv-file-writer.js';
+import { CliCommandAbstract } from './cli-command.abstarct.js';
 
-export default class GenerateCommand implements CliCommandInterface {
+export default class GenerateCommand extends CliCommandAbstract implements CliCommandInterface {
   public readonly name;
   private mockDataSource!: MockDataSource;
 
   constructor(){
+    super();
     this.name = '--generate';
   }
 
@@ -25,7 +27,7 @@ export default class GenerateCommand implements CliCommandInterface {
       await tsvFileWriter.write(`${MockOfferCreator.create(this.mockDataSource)}`);
     }
 
-    console.log(`File ${filepath} was created!`);
+    this.logger.info(`File ${filepath} was created!`);
   }
 
   private async requestMockDataSource(url: string): Promise<void>{
