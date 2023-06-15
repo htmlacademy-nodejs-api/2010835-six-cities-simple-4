@@ -13,3 +13,9 @@ export function fillDTOArray<T, V>(someDto: ClassConstructor<T>, plainObjects: V
 
   return result;
 }
+
+export function createErrorObject(message: string) {
+  return {
+    error: message,
+  };
+}

@@ -1,6 +1,6 @@
 # Пользователи
 
-## Создать нового пользователя
+## Найти пользователя по email
 
 POST http://127.0.0.1:3102/users/index HTTP/1.1
 content-type: application/json
