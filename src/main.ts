@@ -12,6 +12,16 @@ import { DatabaseInterface } from './modules/database/database.interface.js';
 import { UserService } from './modules/users/user.service.js';
 import { ConfigInterface } from './modules/config/config.interface.js';
 import { ConfigService } from './modules/config/config.service.js';
+import { ControllerInterface } from './core/controller/controller.interface.js';
+import { UserController } from './modules/users/user.controller.js';
+import { OfferController } from './modules/offers/offer.controller.js';
+import { OfferServiceInterface } from './modules/offers/offer-service.interface.js';
+import { OfferService } from './modules/offers/offer.service.js';
+import { OfferEntity, OfferModel } from './modules/offers/offer.model.js';
+import { CommentServiceInterface } from './modules/comments/comment-service.interface.js';
+import { CommentService } from './modules/comments/comment.service.js';
+import CommentController from './modules/comments/comment.controller.js';
+import { CommentEntity, CommentModel } from './modules/comments/comment.model.js';
 
 
 async function bootstrap(){
@@ -21,8 +31,20 @@ async function bootstrap(){
   DIContainer.bind<ConfigInterface>(ApplicationComponent.ConfigService).to(ConfigService).inSingletonScope();
   DIContainer.bind<RestApplication>(ApplicationComponent.RestApplication).to(RestApplication).inSingletonScope();
   DIContainer.bind<DatabaseInterface>(ApplicationComponent.DatabaseInterface).to(DatabaseService).inSingletonScope();
-  DIContainer.bind<UserServiceInterface>(ApplicationComponent.UserDbInterface).to(UserService).inSingletonScope();
+  DIContainer.bind<UserServiceInterface>(ApplicationComponent.UserServiceInterface).to(UserService).inSingletonScope();
+  DIContainer.bind<OfferServiceInterface>(ApplicationComponent.OfferServiceInterface).to(OfferService).inSingletonScope();
+  DIContainer.bind<CommentServiceInterface>(ApplicationComponent.CommentServiceInterface).to(CommentService).inSingletonScope();
+
+
   DIContainer.bind<types.ModelType<UserEntity>>(ApplicationComponent.UserModel).toConstantValue(UserModel);
+  DIContainer.bind<types.ModelType<OfferEntity>>(ApplicationComponent.OfferModel).toConstantValue(OfferModel);
+  DIContainer.bind<types.ModelType<CommentEntity>>(ApplicationComponent.CommentModel).toConstantValue(CommentModel);
+
+
+  DIContainer.bind<ControllerInterface>(ApplicationComponent.UserController).to(UserController).inSingletonScope();
+  DIContainer.bind<ControllerInterface>(ApplicationComponent.OfferController).to(OfferController).inSingletonScope();
+  DIContainer.bind<ControllerInterface>(ApplicationComponent.CommentController).to(CommentController).inSingletonScope();
+
 
   const restApplication = DIContainer.get<RestApplication>(ApplicationComponent.RestApplication);
   await restApplication.init();

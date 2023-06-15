@@ -1,11 +1,12 @@
 import { defaultClasses, getModelForClass, modelOptions, prop, Ref } from '@typegoose/typegoose';
 import { Types } from 'mongoose';
-import { Offer } from '../../types/offer.type.js';
 import { EstateType } from '../../types/estate-type.enum.js';
 import { UserEntity } from '../users/user.model.js';
 import { Location } from '../../types/location.type.js';
+import CreateOfferDto from './dto/create-offer.dto.js';
 
 const DEFAULT_COMMENTS_QUANTITY = 0;
+const DEFAULT_RATE_VALUE = 0;
 
 @modelOptions({
   schemaOptions: {
@@ -40,9 +41,6 @@ export class OfferEntity extends defaultClasses.TimeStamps{
   public isPremium!: boolean;
 
   @prop()
-  public isFavorite!: boolean;
-
-  @prop()
   public rate!: number;
 
   @prop()
@@ -61,32 +59,27 @@ export class OfferEntity extends defaultClasses.TimeStamps{
   public goods!: string[];
 
   @prop()
-  public hostEmail!: string;
-
-  @prop()
   public commentsQuantity!: number;
 
   @prop()
   public location!: Location;
 
-  constructor(offerData: Offer, userId: string) {
+  constructor(offerData: CreateOfferDto) {
     super();
 
     this.title = offerData.title;
-    this.userId = new Types.ObjectId(userId);
+    this.userId = new Types.ObjectId(offerData.userId);
     this.description = offerData.description;
     this.city = offerData.city;
     this.previewImageSrc = offerData.previewImageSrc;
     this.offerImageSrc = offerData.offerImageSrc;
     this.isPremium = offerData.isPremium;
-    this.isFavorite = offerData.isFavorite;
-    this.rate = offerData.rate;
+    this.rate = DEFAULT_RATE_VALUE;
     this.estateType = offerData.estateType;
     this.roomsQuantity = offerData.roomsQuantity;
     this.guestQuantity = offerData.guestQuantity;
     this.price = offerData.price;
     this.goods = offerData.goods;
-    this.hostEmail = offerData.hostEmail;
     this.commentsQuantity = DEFAULT_COMMENTS_QUANTITY;
     this.location = offerData.location;
   }

@@ -1,0 +1,28 @@
+# Пользователи
+
+## Найти пользователя по email
+
+POST http://127.0.0.1:3102/users/index HTTP/1.1
+content-type: application/json
+
+{
+    "email": "davie-jones@fakemail.com"
+}
+
+###
+
+## Создать нового пользователя
+
+POST http://127.0.0.1:3102/users HTTP/1.1
+content-type: application/json
+
+{
+    "name": "Davie Jones",
+    "email": "davie-jones@fakemail.com",
+    "avatar": "avatarsrc.jpeg",
+    "userRang": "PRO",
+    "password": "releasesthekraken"
+
+}
+
+###

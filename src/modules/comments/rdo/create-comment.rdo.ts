@@ -1,7 +1,17 @@
+import { Expose } from 'class-transformer';
+import { UserEntity } from '../../users/user.model.js';
+
 export default class CreateCommentRdo {
-  public userId!: string;
+
+  @Expose()
+  public userId!: UserEntity;
+
+  @Expose()
   public createdAt!: string;
-  public updatedAt!: string;
+
+  @Expose()
   public textContent!: string;
+
+  @Expose()
   public rate!: number;
 }
