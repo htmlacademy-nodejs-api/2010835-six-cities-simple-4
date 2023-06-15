@@ -35,7 +35,7 @@ export default class GenerateCommand extends CliCommandAbstract implements CliCo
       const response: AxiosResponse<MockDataSource> = await axios.get(url);
       this.mockDataSource = response.data;
     } catch (error) {
-      console.error(error);
+      this.logger.error((error as Error).message);
     }
   }
 

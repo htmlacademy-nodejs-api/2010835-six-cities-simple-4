@@ -43,7 +43,7 @@ export default class ImportCommand extends CliCommandAbstract implements CliComm
     const createdOrFindedUser = await this.users.findOrCreate({name: mockData.hostName, avatar: mockData.hostAvatar, email: mockData.hostEmail,
       userRang: UserRang.DEFAULT, password: DEFAULT_USER_PASSWORD} as CreateUserDto, DEFAULT_SALT);
 
-    await this.offers.create({...mockData, userId: createdOrFindedUser._id.toString(), hostEmail: createdOrFindedUser.email} as CreateOfferDto);
+    await this.offers.create({...mockData, userId: createdOrFindedUser._id.toString()} as CreateOfferDto);
   }
 
   public async onLine(line: string, resolve: () => void) {

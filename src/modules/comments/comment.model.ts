@@ -1,7 +1,8 @@
 import { Ref, defaultClasses, getModelForClass, modelOptions, prop } from '@typegoose/typegoose';
 import { Types } from 'mongoose';
-import { UserEntity } from '../users/user.model';
-import { OfferEntity } from '../offers/offer.model';
+import { UserEntity } from '../users/user.model.js';
+import { OfferEntity } from '../offers/offer.model.js';
+
 
 @modelOptions({
   schemaOptions: {
@@ -10,12 +11,6 @@ import { OfferEntity } from '../offers/offer.model';
 })
 export class CommentEntity extends defaultClasses.TimeStamps{
   public _id = new Types.ObjectId();
-
-  @prop()
-  public textContent!: string;
-
-  @prop()
-  public rate!: number;
 
   @prop({
     ref: UserEntity,
@@ -29,7 +24,15 @@ export class CommentEntity extends defaultClasses.TimeStamps{
   })
   public offerId!: Ref<UserEntity>;
 
-  constructor(textContent: string, rate: number, userId: string, offerId: string){
+  @prop()
+  public textContent!: string;
+
+  @prop({
+    require: true
+  })
+  public rate!: number;
+
+  constructor(userId: string, offerId: string, textContent: string, rate: number){
     super();
     this.textContent = textContent;
     this.rate = rate;
@@ -38,4 +41,4 @@ export class CommentEntity extends defaultClasses.TimeStamps{
   }
 }
 
-export const OfferModel = getModelForClass(CommentEntity);
+export const CommentModel = getModelForClass(CommentEntity);

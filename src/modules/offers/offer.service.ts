@@ -17,14 +17,14 @@ export class OfferService implements OfferServiceInterface {
 
 
   public async create(dto: CreateOfferDto): Promise<DocumentType<OfferEntity>> {
-    const newOffer = new OfferEntity({...dto, commentsQuantity: 0}, dto.userId);
+    const newOffer = new OfferEntity(dto);
     const createdOffer = await this.offerModel.create(newOffer);
 
     return createdOffer;
   }
 
-  public async patch(dto: UpdateOfferDto): Promise<DocumentType<OfferEntity> | null> {
-    const patchedOffer = await this.offerModel.findByIdAndUpdate(dto, {new: true});
+  public async patch(dto: UpdateOfferDto, offerId: string): Promise<DocumentType<OfferEntity> | null> {
+    const patchedOffer = await this.offerModel.findByIdAndUpdate(offerId, dto, {new: true});
 
     return patchedOffer;
   }

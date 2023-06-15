@@ -1,0 +1,74 @@
+#Предложения
+
+##Получить список предложений
+
+GET  http://127.0.0.1:3102/offers HTTP/1.1
+content-type: application/json
+
+###
+
+##Создать предложение
+
+POST http://127.0.0.1:3102/offers HTTP/1.1
+content-type: application/json
+
+{
+    "title": "Amazing and Extremely Central Flat!!!",
+    "userId": "648778f0450ecf977d029007",
+    "description": "A quiet cozy and picturesque .",
+    "city": "Paris",
+    "previewImageSrc": "img/10.png",
+    "offerImageSrc": ["img/10.png", "img/11.png", "img/12.png", "img/13.png", "img/14.png", "img/15.png"],
+    "isPremium": true,
+    "estateType": "hotel",
+    "roomsQuantity": 4,
+    "guestQuantity": 6,
+    "price": 50000,
+    "goods": ["Washer", "Towels", "Fridge"],
+    "location": [52.770216, 5.595168]
+}
+
+###
+
+##Обновить данные предложения
+
+PATCH http://127.0.0.1:3102/offers/648779f078e87834f99fe376 HTTP/1.1
+content-type: application/json
+
+{
+    "description": "A quiet cozy and picturesque that hides behind a a river by the unique lightness of A."
+}
+
+###
+
+##Запросить детальную информацию о предложении
+
+GET http://localhost:3102/offers/648876421ed0281ea805b184 HTTP/1.1
+
+###
+
+##Выствить оценку предложению
+
+POST http://127.0.0.1:3102/offers/setRate HTTP/1.1
+content-type: application/json
+
+{
+    "offerId": "648876421ed0281ea805b184",
+    "userId": "648876421ed0281ea805b18c",
+    "rate": 5
+}
+
+###
+
+##Выствить оценку предложению
+
+POST http://127.0.0.1:3102/offers/setRate HTTP/1.1
+content-type: application/json
+
+{
+    "offerId": "648876421ed0281ea805b184",
+    "userId": "648876421ed0281ea805b1c1",
+    "rate": 4
+}
+
+###

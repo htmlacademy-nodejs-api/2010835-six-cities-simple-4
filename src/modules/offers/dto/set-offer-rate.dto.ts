@@ -1,6 +1,5 @@
-export default class CreateCommentDto {
+export default class SetOfferRateDto{
   public userId!: string;
   public offerId!: string;
-  public textContent!: string;
   public rate!: number;
 }
