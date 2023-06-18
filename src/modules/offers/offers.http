@@ -43,7 +43,7 @@ content-type: application/json
 
 ##Запросить детальную информацию о предложении
 
-GET http://localhost:3102/offers/648d8d9d0e2eeeb17c393da6 HTTP/1.1
+GET http://localhost:3102/offers/648f761c489983811ae01dd9 HTTP/1.1
 
 ###
 

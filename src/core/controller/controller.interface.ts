@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { MiddlewareInterface } from '../../types/middleware.interface.js';
+import { MiddlewareInterface } from '../middleware/middleware.interface.js';
 import { RouteHandler } from '../../types/route-handler.type.js';
 import { HttpMethod } from '../../types/http-methods.enum.js';
 

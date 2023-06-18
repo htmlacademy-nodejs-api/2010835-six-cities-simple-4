@@ -15,7 +15,6 @@ export class OfferService implements OfferServiceInterface {
     @inject(ApplicationComponent.OfferModel) private readonly offerModel : types.ModelType<OfferEntity>,
   ){}
 
-
   public async create(dto: CreateOfferDto): Promise<DocumentType<OfferEntity>> {
     const createdOffer = await this.offerModel.create(dto);
 
@@ -23,9 +22,7 @@ export class OfferService implements OfferServiceInterface {
   }
 
   public async patch(dto: UpdateOfferDto, offerId: string): Promise<DocumentType<OfferEntity> | null> {
-    console.log('patch');
     const patchedOffer = await this.offerModel.findByIdAndUpdate(offerId, dto, {new: true});
-    console.log('patch complete');
     return patchedOffer;
   }
 
@@ -67,5 +64,11 @@ export class OfferService implements OfferServiceInterface {
       {new: true});
 
     return updatedOffer;
+  }
+
+  public async exists(documentId: string): Promise<boolean> {
+    const foundOffer: DocumentType<OfferEntity> | null = await this.offerModel.findById(documentId);
+
+    return foundOffer !== null;
   }
 }

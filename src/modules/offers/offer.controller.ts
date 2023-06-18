@@ -16,6 +16,7 @@ import { LoggerInterface } from '../logger/logger.interface.js';
 import HttpError from '../../core/errors/http-error.js';
 import { ValidateObjectIdMiddleware } from '../../core/middleware/validate-object-id.middleware.js';
 import { ValidateDtoMiddleware } from '../../core/middleware/validate-dto.middleware.js';
+import { DocumentExistsMiddleware } from '../../core/middleware/document-exists.middleware.js';
 
 type ParamsOfferDetails = {
   offerId: string;
@@ -42,10 +43,14 @@ export class OfferController extends ControllerAbstract {
     this.logger.info('Register routes for OfferController…');
 
     this.addRoute('/', HttpMethod.GET, this.offerList);
-    this.addRoute('/', HttpMethod.POST, this.create, [new ValidateDtoMiddleware(CreateOfferDto)]);
-    this.addRoute('/:offerId', HttpMethod.PATCH, this.patch, [new ValidateObjectIdMiddleware('offerId'), new ValidateDtoMiddleware(UpdateOfferDto)]);
-    this.addRoute('/:offerId', HttpMethod.GET, this.getDetailById, [new ValidateObjectIdMiddleware('offerId')]);
-    this.addRoute('/:offerId', HttpMethod.DELETE, this.delete, [new ValidateObjectIdMiddleware('offerId')]);
+    this.addRoute('/', HttpMethod.POST, this.create,
+      [new ValidateDtoMiddleware(CreateOfferDto)]);
+    this.addRoute('/:offerId', HttpMethod.PATCH, this.patch,
+      [new ValidateObjectIdMiddleware('offerId'), new ValidateDtoMiddleware(UpdateOfferDto), new DocumentExistsMiddleware(this.offerService, 'Offer', 'offerId')],);
+    this.addRoute('/:offerId', HttpMethod.GET, this.getDetailById,
+      [new ValidateObjectIdMiddleware('offerId'), new DocumentExistsMiddleware(this.offerService, 'Offer', 'offerId')]);
+    this.addRoute('/:offerId', HttpMethod.DELETE, this.delete,
+      [new ValidateObjectIdMiddleware('offerId'), new DocumentExistsMiddleware(this.offerService, 'Offer', 'offerId')]);
   }
 
   async offerList(
@@ -94,37 +99,16 @@ export class OfferController extends ControllerAbstract {
     const { offerId } = params;
     const deletedOffer = await this.offerService.deleteById(offerId);
 
-    if (deletedOffer === null) {
-      throw new HttpError(
-        401,
-        `Offer with id ${offerId} not found. You can't kill something that doesn't exist.`,
-        'OfferController'
-      );
-    }
-
     if (deletedOffer !== null) {
-      console.log('Попытка удалить комментарии.');
       await this.commentService.deleteByOfferId(deletedOffer._id.toString());
-      console.log('Комментарии удалены.');
     }
 
     this.noContent(response);
   }
 
-  async getDetailById(
-    { params }: Request<ParamsOfferDetails>,
-    response: Response, _next: NextFunction): Promise<void> {
+  async getDetailById({ params }: Request<ParamsOfferDetails>,response: Response, _next: NextFunction): Promise<void> {
     const { offerId } = params;
     const foundOffer = await this.offerService.findById(offerId);
-
-    if (!foundOffer) {
-      throw new HttpError(
-        401,
-        `Offer with id ${offerId} not found.`,
-        'OfferController'
-      );
-    }
-
     const responseData = fillDTO(OfferDetailRdo, foundOffer);
 
     this.ok(response, responseData);

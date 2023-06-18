@@ -13,6 +13,7 @@ import { fillDTO } from '../../utils/common.js';
 import { ValidateObjectIdMiddleware } from '../../core/middleware/validate-object-id.middleware.js';
 import { ValidateDtoMiddleware } from '../../core/middleware/validate-dto.middleware.js';
 import HttpError from '../../core/errors/http-error.js';
+import { DocumentExistsMiddleware } from '../../core/middleware/document-exists.middleware.js';
 
 type ParamsGetCommentsList = {
   offerId: string;
@@ -29,7 +30,8 @@ export default class CommentController extends ControllerAbstract {
 
     this.logger.info('Register routes for CommentController…');
 
-    this.addRoute('/:offerId', HttpMethod.GET, this.getCommentsList, [new ValidateObjectIdMiddleware('offerId')]);
+    this.addRoute('/:offerId', HttpMethod.GET, this.getCommentsList,
+      [new ValidateObjectIdMiddleware('offerId'), new DocumentExistsMiddleware(this.offerService, 'Offer', 'offerId')]);
     this.addRoute('/', HttpMethod.POST, this.create, [new ValidateDtoMiddleware(CreateCommentDto)]);
   }
 

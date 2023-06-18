@@ -3,7 +3,7 @@ import { injectable } from 'inversify';
 import { HttpMethod } from '../../types/http-methods.enum.js';
 import { RouteHandler } from '../../types/route-handler.type.js';
 import asyncHandler from 'express-async-handler';
-import { MiddlewareInterface } from '../../types/middleware.interface.js';
+import { MiddlewareInterface } from '../middleware/middleware.interface.js';
 //import { RequestHandler } from 'express-serve-static-core';
 
 @injectable()
