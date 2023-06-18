@@ -11,8 +11,7 @@ const MIN_ROOMS_QUANTITY = 1;
 const MAX_ROOMS_QUANTITY = 8;
 const MIN_GUESTS_QUANTITY = 1;
 const MAX_GUESTS_QUANTITY = 10;
-const MIN_RATE_VALUE = 1;
-const MAX_RATE_VALUE = 5;
+const RATE_DEFAULT_VALUE = 0;
 const RANDOM_DATE_LOWER_LIMIT_IN_DAYS = 5;
 const LOCATION_RADIUS_LIMIT_IN_KILOMETERS = 5;
 
@@ -31,7 +30,7 @@ export default class MockOfferCreator{
     const offerImageSrc = getRandomItems(mockDataSource.imageSrc).join(';');
     const isPremium = generateRandomValue(0, 1) === 1;
     const isFavorite = generateRandomValue(0, 1) === 1;
-    const rate = String(generateRandomValue(MIN_RATE_VALUE, MAX_RATE_VALUE, 1));
+    const rate = String(RATE_DEFAULT_VALUE);
     const estateType = getRandomItem(mockDataSource.estateType);
     const roomsQuantity = String(generateRandomValue(MIN_ROOMS_QUANTITY, MAX_ROOMS_QUANTITY));
     const guestsQuantity = String(generateRandomValue(MIN_GUESTS_QUANTITY, MAX_GUESTS_QUANTITY));

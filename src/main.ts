@@ -22,6 +22,8 @@ import { CommentServiceInterface } from './modules/comments/comment-service.inte
 import { CommentService } from './modules/comments/comment.service.js';
 import CommentController from './modules/comments/comment.controller.js';
 import { CommentEntity, CommentModel } from './modules/comments/comment.model.js';
+import { ExceptionFilterInterface } from './core/exception-filters/exception-filter.interface.js';
+import ExceptionFilter from './core/exception-filters/exception-filter.js';
 
 
 async function bootstrap(){
@@ -31,6 +33,7 @@ async function bootstrap(){
   DIContainer.bind<ConfigInterface>(ApplicationComponent.ConfigService).to(ConfigService).inSingletonScope();
   DIContainer.bind<RestApplication>(ApplicationComponent.RestApplication).to(RestApplication).inSingletonScope();
   DIContainer.bind<DatabaseInterface>(ApplicationComponent.DatabaseInterface).to(DatabaseService).inSingletonScope();
+  DIContainer.bind<ExceptionFilterInterface>(ApplicationComponent.ExceptionFilterInterface).to(ExceptionFilter).inSingletonScope();
   DIContainer.bind<UserServiceInterface>(ApplicationComponent.UserServiceInterface).to(UserService).inSingletonScope();
   DIContainer.bind<OfferServiceInterface>(ApplicationComponent.OfferServiceInterface).to(OfferService).inSingletonScope();
   DIContainer.bind<CommentServiceInterface>(ApplicationComponent.CommentServiceInterface).to(CommentService).inSingletonScope();

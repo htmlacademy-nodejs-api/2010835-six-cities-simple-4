@@ -13,10 +13,10 @@ POST  http://127.0.0.1:3102/comments HTTP/1.1
 content-type: application/json
 
 {
-  "offerId": "648ab7ddf2d5b746a32f3493",
-  "userId": "648ab7ddf2d5b746a32f34c0",
+  "offerId": "648e3ddbdf519f968f00fc01",
+  "userId": "648e3ddbdf519f968f00fbff",
   "textContent": "A quiet cozy and picturesque that hides behind a a river by the unique lightness of Amsterdam.",
-  "rate": 3.5
+  "rate": 3
 }
 
 ###

@@ -1,6 +1,7 @@
-import { Expose } from 'class-transformer';
+import { Expose, Type } from 'class-transformer';
 import { EstateType } from '../../../types/estate-type.enum.js';
 import { Location } from '../../../types/location.type.js';
+import UserRdo from '../../users/rdo/user.rdo.js';
 
 export default class OfferRdo{
 
@@ -43,8 +44,9 @@ export default class OfferRdo{
   @Expose()
   public goods!: string[];
 
-  @Expose()
-  public userId!: string;
+  @Expose({ name: 'userId'})
+  @Type(() => UserRdo)
+  public user!: UserRdo;
 
   @Expose()
   public commentQuantity!: number;

@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import { inject, injectable } from 'inversify';
-import { ApplicationComponent } from '../../types/application-component.type';
+import { ApplicationComponent } from '../../types/application-component.type.js';
 import { ExceptionFilterInterface } from './exception-filter.interface.js';
 import { LoggerInterface } from '../../modules/logger/logger.interface.js';
 import HttpError from '../errors/http-error.js';
@@ -13,7 +13,7 @@ export default class ExceptionFilter implements ExceptionFilterInterface {
   constructor(
     @inject(ApplicationComponent.LoggerInterface) private readonly logger: LoggerInterface
   ) {
-    this.logger.info('Register ExceptionFilter');
+    this.logger.info('Register ExceptionFilter...');
   }
 
   private handleHttpError(error: HttpError, _req: Request, res: Response, _next: NextFunction) {

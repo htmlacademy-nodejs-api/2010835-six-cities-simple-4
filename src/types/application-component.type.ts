@@ -3,6 +3,7 @@ export const ApplicationComponent = {
   LoggerInterface: Symbol.for('LoggerInterface'),
   ConfigService: Symbol.for('ConfigService'),
   DatabaseInterface: Symbol.for('DatabaseInterface'),
+  ExceptionFilterInterface: Symbol.for('ExceptionFilterInterface'),
   UserServiceInterface: Symbol.for('UserServiceInterface'),
   CommentServiceInterface: Symbol.for('CommentServiceInterface'),
   OfferServiceInterface: Symbol.for('OfferServiceInterface'),

@@ -16,3 +16,10 @@ export const getRandomDate = (from: Date, to: Date) => {
   const toTime = to.getTime();
   return new Date(fromTime + Math.random() * (toTime - fromTime));
 };
+
+export const roundToFixed = (value: number, digitAfterPoint: number) => {
+  const temp = 10 * digitAfterPoint;
+  const result = Math.round((value + Number.EPSILON) * temp) / temp;
+
+  return !result ? 0 : result;
+};

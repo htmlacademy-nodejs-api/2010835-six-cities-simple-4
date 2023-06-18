@@ -10,6 +10,10 @@ import { HttpMethod } from '../../types/http-methods.enum.js';
 import * as core from 'express-serve-static-core';
 import CreateCommentRdo from './rdo/create-comment.rdo.js';
 import { fillDTO } from '../../utils/common.js';
+import { ValidateObjectIdMiddleware } from '../../core/middleware/validate-object-id.middleware.js';
+import { ValidateDtoMiddleware } from '../../core/middleware/validate-dto.middleware.js';
+import HttpError from '../../core/errors/http-error.js';
+import { DocumentExistsMiddleware } from '../../core/middleware/document-exists.middleware.js';
 
 type ParamsGetCommentsList = {
   offerId: string;
@@ -26,8 +30,9 @@ export default class CommentController extends ControllerAbstract {
 
     this.logger.info('Register routes for CommentController…');
 
-    this.addRoute('/:offerId', HttpMethod.GET, this.getCommentsList.bind(this));
-    this.addRoute('/', HttpMethod.POST, this.create.bind(this));
+    this.addRoute('/:offerId', HttpMethod.GET, this.getCommentsList,
+      [new ValidateObjectIdMiddleware('offerId'), new DocumentExistsMiddleware(this.offerService, 'Offer', 'offerId')]);
+    this.addRoute('/', HttpMethod.POST, this.create, [new ValidateDtoMiddleware(CreateCommentDto)]);
   }
 
   public async getCommentsList(
@@ -44,23 +49,26 @@ export default class CommentController extends ControllerAbstract {
     { body }: Request<Record<string, unknown>, Record<string, unknown>, CreateCommentDto>,
     response: Response
   ): Promise<void> {
-    const isAlreadyCommented = await this.commentService.isAlreadyCommented(body.offerId, body.userId);
+    const { offerId, userId } = body;
+    const isAlreadyCommented = await this.commentService.isAlreadyCommented(offerId, userId);
 
     if(isAlreadyCommented){
-      return this.conflict(response);
+      throw new HttpError(
+        409,
+        `User with id ${userId} has already rated offer with id ${offerId}.`,
+        'CommentController'
+      );
     }
 
     const createdComment = await this.commentService.create(body);
 
     const updatedOffer = await this.offerService.incCommentCount(body.offerId, 1);
 
-    if(updatedOffer !== null){
-      await this.offerService.patch(
-        {
-          rate: (updatedOffer.rate + createdComment.rate) / updatedOffer.commentsQuantity
-        }
-        , body.offerId
-      );
+    if(updatedOffer){
+      const rate = updatedOffer.rate + createdComment.rate;
+
+      await this.offerService.patch({ rate: rate }, offerId);
+
     } else{
       throw new Error('Method call error. Comment controller -> create -> incCommentCount');
     }

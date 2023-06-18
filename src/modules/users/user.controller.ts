@@ -8,7 +8,8 @@ import { HttpMethod } from '../../types/http-methods.enum.js';
 import CreateUserDto from './dto/create-user.dto.js';
 import { LoggerInterface } from '../logger/logger.interface.js';
 import { fillDTO } from '../../utils/common.js';
-import getUserByEmailDto from './dto/get-user-by-email.dto.js';
+import { ValidateDtoMiddleware } from '../../core/middleware/validate-dto.middleware.js';
+import GetUserByEmailDto from './dto/get-user-by-email.dto.js';
 
 @injectable()
 export class UserController extends ControllerAbstract {
@@ -21,12 +22,12 @@ export class UserController extends ControllerAbstract {
 
     this.logger.info('Register routes for UserController…');
 
-    this.addRoute('/index', HttpMethod.POST, this.getUserByEmail.bind(this));
-    this.addRoute('/', HttpMethod.POST, this.create.bind(this));
+    this.addRoute('/index', HttpMethod.POST, this.getUserByEmail.bind(this), [new ValidateDtoMiddleware(GetUserByEmailDto)]);
+    this.addRoute('/', HttpMethod.POST, this.create.bind(this), [new ValidateDtoMiddleware(CreateUserDto)]);
   }
 
   public async getUserByEmail(
-    { body }: Request<Record<string, unknown>, Record<string, unknown>, getUserByEmailDto>,
+    { body }: Request<Record<string, unknown>, Record<string, unknown>, GetUserByEmailDto>,
     response: Response) {
     const foundUser = await this.userService.findByEmail(body.email);
     if (!foundUser) {
