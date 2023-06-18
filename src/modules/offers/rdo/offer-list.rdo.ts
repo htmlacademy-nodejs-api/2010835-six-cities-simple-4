@@ -1,5 +1,7 @@
-import { Expose } from 'class-transformer';
+import { Expose, Transform } from 'class-transformer';
 import { EstateType } from '../../../types/estate-type.enum.js';
+import { roundToFixed } from '../../../utils/random.js';
+
 
 export default class OfferListRdo{
   @Expose()
@@ -21,8 +23,11 @@ export default class OfferListRdo{
   public price!: number;
 
   @Expose()
+  @Transform(({ value, obj }) => roundToFixed(value / obj.commentsQuantity, 1))
   public rate!: number;
 
   @Expose()
   public commentsQuantity!: number;
 }
+
+

@@ -1,18 +1,16 @@
 import { defaultClasses, getModelForClass, modelOptions, prop } from '@typegoose/typegoose';
 import { User } from '../../types/user.type.js';
-import { Types } from 'mongoose';
 import { UserRang } from '../../types/user-rang.enum.js';
 import { createSHA256 } from '../../utils/crypto.js';
 
+export interface UserEntity extends defaultClasses.Base {}
 
 @modelOptions({
   schemaOptions: {
     collection: 'users'
   }
 })
-export class UserEntity extends defaultClasses.TimeStamps implements User{
-  public _id = new Types.ObjectId();
-
+export class UserEntity extends defaultClasses.TimeStamps{
   @prop({ required: true })
   public name = '';
 

@@ -17,15 +17,15 @@ export class OfferService implements OfferServiceInterface {
 
 
   public async create(dto: CreateOfferDto): Promise<DocumentType<OfferEntity>> {
-    const newOffer = new OfferEntity(dto);
-    const createdOffer = await this.offerModel.create(newOffer);
+    const createdOffer = await this.offerModel.create(dto);
 
     return createdOffer;
   }
 
   public async patch(dto: UpdateOfferDto, offerId: string): Promise<DocumentType<OfferEntity> | null> {
+    console.log('patch');
     const patchedOffer = await this.offerModel.findByIdAndUpdate(offerId, dto, {new: true});
-
+    console.log('patch complete');
     return patchedOffer;
   }
 
@@ -35,8 +35,8 @@ export class OfferService implements OfferServiceInterface {
     return deletedOffer;
   }
 
-  public async findMany(limit: number): Promise<DocumentType<OfferEntity>[]> {
-    const foundOffer = await this.offerModel.find().limit(limit ?? DEFAULT_OFFER_LIMIT).populate(['userId']);
+  public async findMany(limit: number = DEFAULT_OFFER_LIMIT): Promise<DocumentType<OfferEntity>[]> {
+    const foundOffer = await this.offerModel.find().limit(limit).populate(['userId']);
 
     return foundOffer;
   }

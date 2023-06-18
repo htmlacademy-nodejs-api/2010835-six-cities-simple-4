@@ -1,10 +1,11 @@
-import { Expose } from 'class-transformer';
-import { UserEntity } from '../../users/user.model.js';
+import { Expose, Type } from 'class-transformer';
+import UserRdo from '../../users/rdo/user.rdo.js';
 
 export default class CreateCommentRdo {
 
-  @Expose()
-  public userId!: UserEntity;
+  @Expose({name: 'userId'})
+  @Type(() => UserRdo)
+  public user!: UserRdo;
 
   @Expose()
   public createdAt!: string;

@@ -2,7 +2,7 @@
 
 ##Получить список предложений
 
-GET  http://127.0.0.1:3102/offers HTTP/1.1
+GET  http://127.0.0.1:3102/offers?limit=5 HTTP/1.1
 content-type: application/json
 
 ###
@@ -14,25 +14,25 @@ content-type: application/json
 
 {
     "title": "Amazing and Extremely Central Flat!!!",
-    "userId": "648778f0450ecf977d029007",
+    "userId": "648c28c563fbbf6a409fb84a",
     "description": "A quiet cozy and picturesque .",
-    "city": "Paris",
+    "city": "Pariss",
     "previewImageSrc": "img/10.png",
     "offerImageSrc": ["img/10.png", "img/11.png", "img/12.png", "img/13.png", "img/14.png", "img/15.png"],
     "isPremium": true,
     "estateType": "hotel",
     "roomsQuantity": 4,
-    "guestQuantity": 6,
+    "guestQuantity": 6.3,
     "price": 50000,
     "goods": ["Washer", "Towels", "Fridge"],
-    "location": [52.770216, 5.595168]
+    "location": {"latitude": 52.770216, "longitude": 5.595168}
 }
 
 ###
 
 ##Обновить данные предложения
 
-PATCH http://127.0.0.1:3102/offers/648779f078e87834f99fe376 HTTP/1.1
+PATCH http://127.0.0.1:3102/offers/648e295a0baa53f55d078d30 HTTP/1.1
 content-type: application/json
 
 {
@@ -43,32 +43,14 @@ content-type: application/json
 
 ##Запросить детальную информацию о предложении
 
-GET http://localhost:3102/offers/648876421ed0281ea805b184 HTTP/1.1
+GET http://localhost:3102/offers/648d8d9d0e2eeeb17c393da6 HTTP/1.1
 
 ###
 
-##Выствить оценку предложению
+##Удалить информацию о предложении
 
-POST http://127.0.0.1:3102/offers/setRate HTTP/1.1
-content-type: application/json
-
-{
-    "offerId": "648876421ed0281ea805b184",
-    "userId": "648876421ed0281ea805b18c",
-    "rate": 5
-}
+DELETE  http://localhost:3102/offers/648d8d9d0e2eeeb17c393da6 HTTP/1.1
 
 ###
 
-##Выствить оценку предложению
 
-POST http://127.0.0.1:3102/offers/setRate HTTP/1.1
-content-type: application/json
-
-{
-    "offerId": "648876421ed0281ea805b184",
-    "userId": "648876421ed0281ea805b1c1",
-    "rate": 4
-}
-
-###
