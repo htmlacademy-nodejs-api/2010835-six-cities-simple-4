@@ -48,4 +48,10 @@ export class UserService implements UserServiceInterface{
       .findByIdAndDelete(userId)
       .exec();
   }
+
+  public async exists(documentId: string): Promise<boolean> {
+    const foundOffer: DocumentType<UserEntity> | null = await this.userModel.findById(documentId);
+
+    return foundOffer !== null;
+  }
 }

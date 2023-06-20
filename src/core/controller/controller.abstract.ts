@@ -28,10 +28,6 @@ export abstract class ControllerAbstract{
     this.router[httpMethod](routePath, allHandlers);
   }
 
-  // public addRoute(routePath: string, httpMethod: HttpMethod, routeHandler: RouteHandler, _middlewares?: MiddlewareInterface[]) {
-  //   this.router[httpMethod](routePath, asyncHandler((routeHandler.bind(this))));
-  // }
-
   protected ok<T>(response: Response, data: T) {
     response.status(200).send(data);
   }

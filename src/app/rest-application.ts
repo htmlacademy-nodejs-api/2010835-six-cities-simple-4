@@ -46,11 +46,11 @@ export class RestApplication {
   }
 
   private async initDatabase(){
-    const host = this.config.get('DB_HOST') as string;
-    const port = this.config.get('DB_PORT') as string;
-    const username = this.config.get('USER_NAME') as string;
-    const password = this.config.get('PASSWORD') as string;
-    const dbName = this.config.get('DB_NAME') as string;
+    const host = this.config.get('DB_HOST');
+    const port = this.config.get('DB_PORT');
+    const username = this.config.get('USER_NAME');
+    const password = this.config.get('PASSWORD');
+    const dbName = this.config.get('DB_NAME');
 
     const databaseConnectionString = getDbConnectionString(username, password, host, port, dbName);
 
@@ -68,6 +68,7 @@ export class RestApplication {
   private async initMiddleware(): Promise<void>{
     this.logger.info('Try to init middleware...');
     this.expressApplication.use(express.json());
+    this.expressApplication.use('/upload', express.static(this.config.get('UPLOAD_DIRECTORY')));
     this.logger.info('Middleware initialization complete successfuly.');
   }
 

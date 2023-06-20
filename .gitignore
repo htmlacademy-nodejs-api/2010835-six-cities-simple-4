@@ -12,3 +12,4 @@ coverage
 
 /mock/*.tsv
 /.env
+/upload/
