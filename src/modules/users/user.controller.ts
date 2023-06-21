@@ -70,7 +70,7 @@ export class UserController extends ControllerAbstract {
       return;
     }
 
-    const createdUser = await this.userService.create({ ...body, avatar: DEFAULT_AVATAR }, '');
+    const createdUser = await this.userService.create({ ...body, avatar: DEFAULT_AVATAR }, this.configService.get('SALT'));
     const responseData = fillDTO(UserRdo, createdUser);
 
     this.ok(response, responseData);
