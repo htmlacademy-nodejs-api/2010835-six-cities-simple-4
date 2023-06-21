@@ -5,5 +5,5 @@ import { HttpMethod } from '../../types/http-methods.enum.js';
 
 export interface ControllerInterface{
   getRouter(): Router;
-  addRoute(routePath: string, httpMethod: HttpMethod, routeHandler: RouteHandler, _middlewares?: MiddlewareInterface[]): void;
+  addRoute(routePath: string, httpMethod: HttpMethod, routeHandler: RouteHandler, middlewares?: MiddlewareInterface[]): void;
 }

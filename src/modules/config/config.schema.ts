@@ -4,14 +4,15 @@ import validator from 'convict-format-with-validator';
 convict.addFormats(validator);
 
 export type ConfigSchema = {
-  PORT: number;
+  PORT: string;
   HOST: string;
-  DB_PORT: number;
+  DB_PORT: string;
   DB_HOST: string;
   SALT: string;
   USER_NAME: string,
   PASSWORD: string,
   DB_NAME: string,
+  UPLOAD_DIRECTORY: string,
 }
 
 export const configSchema = convict<ConfigSchema>({
@@ -19,7 +20,7 @@ export const configSchema = convict<ConfigSchema>({
     doc: 'Port for incoming connections',
     format: 'port',
     env: 'PORT',
-    default: 4001,
+    default: '4001',
   },
   HOST: {
     doc: 'IP address for incoming connections',
@@ -31,7 +32,7 @@ export const configSchema = convict<ConfigSchema>({
     doc: 'Port of the database server (MongoDB)',
     format: 'port',
     env: 'DB_PORT',
-    default: 4002,
+    default: '4002',
   },
   DB_HOST: {
     doc: 'IP address of the database server (MongoDB)',
@@ -61,6 +62,12 @@ export const configSchema = convict<ConfigSchema>({
     doc: 'Database name',
     format: String,
     env: 'DB_NAME',
+    default: '',
+  },
+  UPLOAD_DIRECTORY: {
+    doc: 'Directory for static files',
+    format: String,
+    env: 'UPLOAD_DIRECTORY',
     default: '',
   }
 });

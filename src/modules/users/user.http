@@ -19,10 +19,20 @@ content-type: application/json
 {
     "name": "Davie Jones",
     "email": "davie-jones@fakemail.com",
-    "avatar": "avatarsrc.jpeg",
     "userRang": "PRO",
-    "password": "releasesthekraken"
-
+    "password": "releasekrakn"
 }
 
 ###
+
+## Отправка аватарки пользователю
+
+POST http://127.0.0.1:3102/users/64929f0867a6070e465098cd/avatar HTTP/1.1
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="avatar"; filename="avatar.png"
+Content-Type: image/png
+
+< /home/jason_doe/avatar.png
+------WebKitFormBoundary7MA4YWxkTrZu0gW--

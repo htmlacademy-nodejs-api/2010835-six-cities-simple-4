@@ -12,7 +12,7 @@ export default class CreateUserDto {
 
   public avatar!: string;
 
-  @IsEnum(() => UserRang, {message: 'Field userRang must be one of the UserRang enum values'})
+  @IsEnum(UserRang, {message: 'Field userRang must be one of the UserRang enum values'})
   public userRang!: UserRang;
 
   @IsString({message: 'Field password must be type of string'})

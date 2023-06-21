@@ -4,12 +4,12 @@ import { HttpMethod } from '../../types/http-methods.enum.js';
 import { RouteHandler } from '../../types/route-handler.type.js';
 import asyncHandler from 'express-async-handler';
 import { MiddlewareInterface } from '../middleware/middleware.interface.js';
-//import { RequestHandler } from 'express-serve-static-core';
+import { RequestHandler } from 'express-serve-static-core';
 
 @injectable()
 export abstract class ControllerAbstract{
   protected router: Router;
-  //protected middlewares: RequestHandler[] | undefined;
+  protected middlewares: RequestHandler[] | undefined;
 
   constructor(){
     this.router = Router();
@@ -20,17 +20,13 @@ export abstract class ControllerAbstract{
   }
 
   public addRoute(routePath: string, httpMethod: HttpMethod, routeHandler: RouteHandler, middlewares?: MiddlewareInterface[]) {
-    const _routeHandler = asyncHandler((routeHandler.bind(this)));
-    const _middlewares = middlewares?.map((middleware) => asyncHandler(middleware.execute.bind(middleware)));
+    const handler = asyncHandler((routeHandler.bind(this)));
+    this.middlewares = middlewares?.map((middleware) => asyncHandler(middleware.execute.bind(middleware)));
 
-    const allHandlers = _middlewares ? [..._middlewares, _routeHandler] : _routeHandler;
+    const allHandlers = this.middlewares ? [...this.middlewares, handler] : handler;
 
     this.router[httpMethod](routePath, allHandlers);
   }
-
-  // public addRoute(routePath: string, httpMethod: HttpMethod, routeHandler: RouteHandler, _middlewares?: MiddlewareInterface[]) {
-  //   this.router[httpMethod](routePath, asyncHandler((routeHandler.bind(this))));
-  // }
 
   protected ok<T>(response: Response, data: T) {
     response.status(200).send(data);
