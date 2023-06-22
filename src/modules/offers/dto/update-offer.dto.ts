@@ -2,7 +2,7 @@ import { CityName } from '../../../types/city-name.enum.js';
 import { EstateType } from '../../../types/estate-type.enum.js';
 import { Goods } from '../../../types/goods.enum.js';
 import { Location } from '../../../types/location.type.js';
-import { ArrayMaxSize, ArrayMinSize, IsArray, IsBoolean, IsEnum, IsInt, IsMongoId, IsOptional, IsString, Max, MaxLength, Min, MinLength } from 'class-validator';
+import { ArrayMaxSize, ArrayMinSize, IsArray, IsBoolean, IsEnum, IsInt, IsObject, IsOptional, IsString, Max, MaxLength, Min, MinLength } from 'class-validator';
 
 
 export default class UpdateOfferDto{
@@ -68,9 +68,6 @@ export default class UpdateOfferDto{
   public goods?: string[];
 
   @IsOptional()
-  @IsMongoId({message: 'Field userId must be valid Mongo id'})
-  public userId?: string;
-
-  @IsOptional()
+  @IsObject()
   public location?: Location;
 }

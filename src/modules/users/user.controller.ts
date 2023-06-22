@@ -7,7 +7,7 @@ import UserRdo from './rdo/user.rdo.js';
 import { HttpMethod } from '../../types/http-methods.enum.js';
 import CreateUserDto from './dto/create-user.dto.js';
 import { LoggerInterface } from '../logger/logger.interface.js';
-import { fillDTO } from '../../utils/common.js';
+import { createJWT, fillDTO } from '../../utils/common.js';
 import { ValidateDtoMiddleware } from '../../core/middleware/validate-dto.middleware.js';
 import GetUserByEmailDto from './dto/get-user-by-email.dto.js';
 import { ValidateObjectIdMiddleware } from '../../core/middleware/validate-object-id.middleware.js';
@@ -15,12 +15,16 @@ import { UploadFileMiddleware } from '../../core/middleware/upload-file-manager.
 import { ConfigService } from '../config/config.service.js';
 import { DocumentExistsMiddleware } from '../../core/middleware/document-exists.middleware.js';
 import { ParamsDictionary } from 'express-serve-static-core';
+import LoginUserDto from './dto/login-user.dto.js';
+import HttpError from '../../core/errors/http-error.js';
+import LoggedUserRdo from './rdo/login-user.rdo.js';
 
 type ParamsUploadAvatar = {
   userId: string;
 } | ParamsDictionary;
 
 const DEFAULT_AVATAR = 'upload/default-avatar.jpeg';
+const JWT_ALGORITHM = 'HS256';
 
 @injectable()
 export class UserController extends ControllerAbstract {
@@ -36,6 +40,10 @@ export class UserController extends ControllerAbstract {
 
     this.addRoute('/index', HttpMethod.POST, this.getUserByEmail,
       [new ValidateDtoMiddleware(GetUserByEmailDto)]);
+    this.addRoute('/login', HttpMethod.POST, this.login,
+      [new ValidateDtoMiddleware(LoginUserDto)]);
+    this.addRoute('/login', HttpMethod.GET, this.checkAuthenticate,
+      []);
     this.addRoute('/', HttpMethod.POST, this.create,
       [new ValidateDtoMiddleware(CreateUserDto)]);
     this.addRoute('/:userId/avatar', HttpMethod.POST, this.uploadAvatar,
@@ -47,8 +55,8 @@ export class UserController extends ControllerAbstract {
     response: Response) {
     const foundUser = await this.userService.findByEmail(body.email);
     if (!foundUser) {
-      response.statusMessage = `Conflict. User with email "${body.email}" not found.`;
-      this.conflict(response);
+      response.statusMessage = `Not found. User with email "${body.email}" not found.`;
+      this.notFound(response);
 
       return;
     }
@@ -64,10 +72,11 @@ export class UserController extends ControllerAbstract {
     const isExists = await this.userService.findByEmail(body.email);
 
     if(isExists){
-      response.statusMessage = 'Conflict. User with the same email is already exists.';
-      this.conflict(response);
-
-      return;
+      throw new HttpError(
+        409,
+        'User with the same email is already exists',
+        'UserController'
+      );
     }
 
     const createdUser = await this.userService.create({ ...body, avatar: DEFAULT_AVATAR }, this.configService.get('SALT'));
@@ -92,5 +101,45 @@ export class UserController extends ControllerAbstract {
     this.created(response, {
       filepath: file.path
     });
+  }
+
+  public async login(
+    { body }: Request<Record<string, unknown>, Record<string, unknown>, LoginUserDto>,
+    response: Response,
+  ): Promise<void> {
+    const user = await this.userService.verifyUser(body, this.configService.get('SALT'));
+
+    if (! user) {
+      throw new HttpError(
+        401,
+        'Unauthorized',
+        'UserController'
+      );
+    }
+
+    const token = await createJWT(
+      JWT_ALGORITHM,
+      this.configService.get('JWT_SECRET'),
+      {
+        email: user.email,
+        id: user.id
+      }
+    );
+
+    this.ok(response, fillDTO(LoggedUserRdo, { email: user.email, token }));
+  }
+
+  public async checkAuthenticate({ user: { email }}: Request, res: Response) {
+    const foundedUser = await this.userService.findByEmail(email);
+
+    if (! foundedUser) {
+      throw new HttpError(
+        401,
+        'Unauthorized',
+        'UserController'
+      );
+    }
+
+    this.ok(res, fillDTO(LoggedUserRdo, foundedUser));
   }
 }

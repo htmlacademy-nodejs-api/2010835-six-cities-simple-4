@@ -2,7 +2,7 @@
 
 ##Получить список предложений
 
-GET  http://127.0.0.1:3102/offers?limit=5 HTTP/1.1
+GET  http://127.0.0.1:3102/offers?limit=60 HTTP/1.1
 content-type: application/json
 
 ###
@@ -10,19 +10,20 @@ content-type: application/json
 ##Создать предложение
 
 POST http://127.0.0.1:3102/offers HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImRhdmllLWpvbmVzQGZha2VtYWlsLmNvbSIsImlkIjoiNjQ5M2Y1MzAzZWU4NmY0OTExZjFhNGMwIiwiaWF0IjoxNjg3NDI2NDYwLCJleHAiOjE2ODc0MjczNjB9.DYfMpMUV6VHHZ9MsTHzuVlS3GbSwCxz5RMLwo3BtvNE
 content-type: application/json
 
 {
     "title": "Amazing and Extremely Central Flat!!!",
     "userId": "648c28c563fbbf6a409fb84a",
     "description": "A quiet cozy and picturesque .",
-    "city": "Pariss",
+    "city": "Paris",
     "previewImageSrc": "img/10.png",
     "offerImageSrc": ["img/10.png", "img/11.png", "img/12.png", "img/13.png", "img/14.png", "img/15.png"],
     "isPremium": true,
     "estateType": "hotel",
     "roomsQuantity": 4,
-    "guestQuantity": 6.3,
+    "guestQuantity": 6,
     "price": 50000,
     "goods": ["Washer", "Towels", "Fridge"],
     "location": {"latitude": 52.770216, "longitude": 5.595168}
@@ -32,7 +33,8 @@ content-type: application/json
 
 ##Обновить данные предложения
 
-PATCH http://127.0.0.1:3102/offers/648e295a0baa53f55d078d30 HTTP/1.1
+PATCH http://127.0.0.1:3102/offers/649415be59f21ae541f9ace2 HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImRhdmllLWpvbmVzQGZha2VtYWlsLmNvbSIsImlkIjoiNjQ5M2Y1MzAzZWU4NmY0OTExZjFhNGMwIiwiaWF0IjoxNjg3NDI2NDYwLCJleHAiOjE2ODc0MjczNjB9.DYfMpMUV6VHHZ9MsTHzuVlS3GbSwCxz5RMLwo3BtvNE
 content-type: application/json
 
 {
@@ -43,13 +45,14 @@ content-type: application/json
 
 ##Запросить детальную информацию о предложении
 
-GET http://localhost:3102/offers/648f761c489983811ae01dd9 HTTP/1.1
+GET http://localhost:3102/offers/6493dc28acbc42f796eafdee HTTP/1.1
 
 ###
 
 ##Удалить информацию о предложении
 
 DELETE  http://localhost:3102/offers/648d8d9d0e2eeeb17c393da6 HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImRhdmllLWpvbmVzQGZha2VtYWlsLmNvbSIsImlkIjoiNjQ5M2Y1MzAzZWU4NmY0OTExZjFhNGMwIiwiaWF0IjoxNjg3NDE4MTcyLCJleHAiOjE2ODc0MTkwNzJ9.sY2O2NShnXjo83fiT-hCVLveR6Vea9sH31UxGAm7sKw
 
 ###
 

@@ -14,6 +14,7 @@ import { ValidateObjectIdMiddleware } from '../../core/middleware/validate-objec
 import { ValidateDtoMiddleware } from '../../core/middleware/validate-dto.middleware.js';
 import HttpError from '../../core/errors/http-error.js';
 import { DocumentExistsMiddleware } from '../../core/middleware/document-exists.middleware.js';
+import { PrivateRouteMiddleware } from '../../core/middleware/private-route.middleware.js';
 
 type ParamsGetCommentsList = {
   offerId: string;
@@ -32,7 +33,8 @@ export default class CommentController extends ControllerAbstract {
 
     this.addRoute('/:offerId', HttpMethod.GET, this.getCommentsList,
       [new ValidateObjectIdMiddleware('offerId'), new DocumentExistsMiddleware(this.offerService, 'Offer', 'offerId')]);
-    this.addRoute('/', HttpMethod.POST, this.create, [new ValidateDtoMiddleware(CreateCommentDto)]);
+    this.addRoute('/', HttpMethod.POST, this.create,
+      [new PrivateRouteMiddleware(), new PrivateRouteMiddleware(), new ValidateDtoMiddleware(CreateCommentDto)]);
   }
 
   public async getCommentsList(
@@ -46,21 +48,21 @@ export default class CommentController extends ControllerAbstract {
   }
 
   public async create(
-    { body }: Request<Record<string, unknown>, Record<string, unknown>, CreateCommentDto>,
+    { body, user }: Request<Record<string, unknown>, Record<string, unknown>, CreateCommentDto>,
     response: Response
   ): Promise<void> {
-    const { offerId, userId } = body;
-    const isAlreadyCommented = await this.commentService.isAlreadyCommented(offerId, userId);
+    const { offerId } = body;
+    const isAlreadyCommented = await this.commentService.isAlreadyCommented(offerId, user.id);
 
     if(isAlreadyCommented){
       throw new HttpError(
         409,
-        `User with id ${userId} has already rated offer with id ${offerId}.`,
+        `User with id ${user.id} has already rated offer with id ${offerId}.`,
         'CommentController'
       );
     }
 
-    const createdComment = await this.commentService.create(body);
+    const createdComment = await this.commentService.create({...body, userId: user.id});
 
     const updatedOffer = await this.offerService.incCommentCount(body.offerId, 1);
 

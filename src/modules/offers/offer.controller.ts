@@ -1,4 +1,4 @@
-import { NextFunction, Request, Response } from 'express';
+import { Request, Response } from 'express';
 import { ControllerAbstract } from '../../core/controller/controller.abstract.js';
 import { inject, injectable } from 'inversify';
 import { ApplicationComponent } from '../../types/application-component.type.js';
@@ -17,6 +17,7 @@ import HttpError from '../../core/errors/http-error.js';
 import { ValidateObjectIdMiddleware } from '../../core/middleware/validate-object-id.middleware.js';
 import { ValidateDtoMiddleware } from '../../core/middleware/validate-dto.middleware.js';
 import { DocumentExistsMiddleware } from '../../core/middleware/document-exists.middleware.js';
+import { PrivateRouteMiddleware } from '../../core/middleware/private-route.middleware.js';
 
 type ParamsOfferDetails = {
   offerId: string;
@@ -44,13 +45,13 @@ export class OfferController extends ControllerAbstract {
 
     this.addRoute('/', HttpMethod.GET, this.offerList);
     this.addRoute('/', HttpMethod.POST, this.create,
-      [new ValidateDtoMiddleware(CreateOfferDto)]);
+      [new PrivateRouteMiddleware(), new ValidateDtoMiddleware(CreateOfferDto)]);
     this.addRoute('/:offerId', HttpMethod.PATCH, this.patch,
-      [new ValidateObjectIdMiddleware('offerId'), new ValidateDtoMiddleware(UpdateOfferDto), new DocumentExistsMiddleware(this.offerService, 'Offer', 'offerId')],);
+      [new PrivateRouteMiddleware(), new ValidateObjectIdMiddleware('offerId'), new ValidateDtoMiddleware(UpdateOfferDto), new DocumentExistsMiddleware(this.offerService, 'Offer', 'offerId')],);
     this.addRoute('/:offerId', HttpMethod.GET, this.getDetailById,
       [new ValidateObjectIdMiddleware('offerId'), new DocumentExistsMiddleware(this.offerService, 'Offer', 'offerId')]);
     this.addRoute('/:offerId', HttpMethod.DELETE, this.delete,
-      [new ValidateObjectIdMiddleware('offerId'), new DocumentExistsMiddleware(this.offerService, 'Offer', 'offerId')]);
+      [new PrivateRouteMiddleware(), new ValidateObjectIdMiddleware('offerId'), new DocumentExistsMiddleware(this.offerService, 'Offer', 'offerId')]);
   }
 
   async offerList(
@@ -65,10 +66,10 @@ export class OfferController extends ControllerAbstract {
   }
 
   async create(
-    { body }: Request<Record<string, unknown>, Record<string, unknown>, CreateOfferDto>,
+    { body, user }: Request<Record<string, unknown>, Record<string, unknown>, CreateOfferDto>,
     response: Response
   ): Promise<void> {
-    const createdOffer = await this.offerService.create(body);
+    const createdOffer = await this.offerService.create({...body, userId: user.id});
     const foundOffer = await this.offerService.findById(createdOffer.id);
     const responseData = fillDTO(OfferRdo, foundOffer);
 
@@ -76,14 +77,24 @@ export class OfferController extends ControllerAbstract {
   }
 
   async patch(
-    { body, params }: Request<ParamsOfferPatch, Record<string, unknown>, UpdateOfferDto>,
+    { body, params, user }: Request<ParamsOfferPatch, Record<string, unknown>, UpdateOfferDto>,
     response: Response
   ): Promise<void> {
     const { offerId } = params;
+
+    const foundOffer = await this.offerService.findById(offerId);
+    if(foundOffer?.userId?._id.toString() !== user.id){
+      throw new HttpError(
+        409,
+        `Offer with id ${offerId} not associated with user with id ${user.id}.`,
+        'OfferController'
+      );
+    }
+
     const patchedOffer = await this.offerService.patch(body, offerId);
     if (patchedOffer === null) {
       throw new HttpError(
-        401,
+        404,
         `Offer with id ${offerId} not found.`,
         'OfferController'
       );
@@ -94,9 +105,19 @@ export class OfferController extends ControllerAbstract {
   }
 
   async delete(
-    { params }: Request<ParamsOfferDetails>,
+    { params, user }: Request<ParamsOfferDetails>,
     response: Response): Promise<void> {
     const { offerId } = params;
+
+    const foundOffer = await this.offerService.findById(offerId);
+    if(foundOffer?.userId?.toString() !== user.id){
+      throw new HttpError(
+        409,
+        `Offer with id ${offerId} not associated with user with id ${user.id}.`,
+        'OfferController'
+      );
+    }
+
     const deletedOffer = await this.offerService.deleteById(offerId);
 
     if (deletedOffer !== null) {
@@ -106,29 +127,11 @@ export class OfferController extends ControllerAbstract {
     this.noContent(response);
   }
 
-  async getDetailById({ params }: Request<ParamsOfferDetails>,response: Response, _next: NextFunction): Promise<void> {
+  async getDetailById({ params }: Request<ParamsOfferDetails>,response: Response): Promise<void> {
     const { offerId } = params;
     const foundOffer = await this.offerService.findById(offerId);
     const responseData = fillDTO(OfferDetailRdo, foundOffer);
 
     this.ok(response, responseData);
-  }
-
-  async calculateOfferRating(offerId: string): Promise<number>{
-    const foundComments = await this.commentService.index(offerId);
-
-    if(foundComments.length === 0){
-      return 0;
-    }
-
-    let rateSum = 0;
-
-    foundComments.forEach((comment) => {
-      rateSum += comment.rate;
-    });
-
-    const rate = rateSum / foundComments.length;
-
-    return rate;
   }
 }

@@ -7,6 +7,7 @@ import { DatabaseInterface } from '../modules/database/database.interface.js';
 import { getDbConnectionString } from '../utils/database.js';
 import { ControllerInterface } from '../core/controller/controller.interface.js';
 import { ExceptionFilterInterface } from '../core/exception-filters/exception-filter.interface.js';
+import { AuthenticateMiddleware } from '../core/middleware/authentication.middleware.js';
 
 @injectable()
 export class RestApplication {
@@ -69,6 +70,8 @@ export class RestApplication {
     this.logger.info('Try to init middleware...');
     this.expressApplication.use(express.json());
     this.expressApplication.use('/upload', express.static(this.config.get('UPLOAD_DIRECTORY')));
+    const authenticateMiddleware = new AuthenticateMiddleware(this.config.get('JWT_SECRET'));
+    this.expressApplication.use(authenticateMiddleware.execute.bind(authenticateMiddleware));
     this.logger.info('Middleware initialization complete successfuly.');
   }
 

@@ -48,6 +48,7 @@ export default class ImportCommand extends CliCommandAbstract implements CliComm
 
   public async onLine(line: string, resolve: () => void) {
     const parsedMockData = parseMockData(line);
+
     await this.saveDataToDatabase(parsedMockData);
 
     resolve();

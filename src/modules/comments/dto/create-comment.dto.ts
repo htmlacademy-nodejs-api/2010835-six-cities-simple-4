@@ -1,7 +1,6 @@
 import { IsInt, IsMongoId, IsString, Max, MaxLength, Min, MinLength } from 'class-validator';
 
 export default class CreateCommentDto {
-  @IsMongoId({message: 'Field userId must be valid Mongo id'})
   public userId!: string;
 
   @IsMongoId({message: 'Field offerId must be valid Mongo id'})

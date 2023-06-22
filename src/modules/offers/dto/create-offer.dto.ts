@@ -1,4 +1,4 @@
-import { ArrayMaxSize, ArrayMinSize, IsArray, IsBoolean, IsEnum, IsInt, IsMongoId, IsString, Max, MaxLength, Min, MinLength } from 'class-validator';
+import { ArrayMaxSize, ArrayMinSize, IsArray, IsBoolean, IsEnum, IsInt, IsMongoId, IsObject, IsString, Max, MaxLength, Min, MinLength } from 'class-validator';
 import { EstateType } from '../../../types/estate-type.enum.js';
 import { Location } from '../../../types/location.type.js';
 import { CityName } from '../../../types/city-name.enum.js';
@@ -53,5 +53,6 @@ export default class CreateOfferDto{
   @IsMongoId({message: 'Field userId must be valid Mongo id'})
   public userId!: string;
 
+  @IsObject()
   public location!: Location;
 }
