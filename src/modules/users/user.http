@@ -11,6 +11,18 @@ content-type: application/json
 
 ###
 
+## Аторизироваться
+
+POST http://127.0.0.1:3102/users/login HTTP/1.1
+content-type: application/json
+
+{
+    "email": "davie-jones@fakemail.com",
+    "password": "releasekrakn"
+}
+
+###
+
 ## Создать нового пользователя
 
 POST http://127.0.0.1:3102/users HTTP/1.1
@@ -25,7 +37,7 @@ content-type: application/json
 
 ###
 
-## Отправка аватарки пользователю
+## Отправить аватар пользователя
 
 POST http://127.0.0.1:3102/users/64929f0867a6070e465098cd/avatar HTTP/1.1
 Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
@@ -36,3 +48,11 @@ Content-Type: image/png
 
 < /home/jason_doe/avatar.png
 ------WebKitFormBoundary7MA4YWxkTrZu0gW--
+
+###
+
+## Проверить токен пользователя
+GET http://127.0.0.1:3102/users/login HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImRhdmllLWpvbmVzQGZha2VtYWlsLmNvbSIsImlkIjoiNjQ5NDJiNzU1Yjc3ZDNhZTgwMGJjYmVhIiwiaWF0IjoxNjg3NDMyMzEyLCJleHAiOjE2ODc0MzMyMTJ9.WsgvoNEia-Z8yVp3ne9eewR6zD1IYKOInYW2wBDL7WM
+
+###

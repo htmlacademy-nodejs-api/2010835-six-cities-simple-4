@@ -1,20 +1,19 @@
 #Предложения
 
-##Получить список предложений
+##Получить список комментариев по индентификатору предложения
 
-GET  http://127.0.0.1:3102/comments/648a0ba032901619f2b114fb HTTP/1.1
+GET  http://127.0.0.1:3102/comments/64929f0867a6070e465098cf HTTP/1.1
 content-type: application/json
 
 ###
 
-##Получить список предложений
+##Создать комментарий
 
 POST  http://127.0.0.1:3102/comments HTTP/1.1
 content-type: application/json
 
 {
   "offerId": "648e3ddbdf519f968f00fc01",
-  "userId": "648e3ddbdf519f968f00fbff",
   "textContent": "A quiet cozy and picturesque that hides behind a a river by the unique lightness of Amsterdam.",
   "rate": 3
 }

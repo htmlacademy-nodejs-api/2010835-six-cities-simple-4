@@ -16,10 +16,10 @@ export class HelpCliCommand extends CliCommandAbstract implements CliCommandInte
       Пример:
           main.js --<command> [--arguments]
       Команды:
-          --version:                   # выводит номер версии
-          --help:                      # печатает этот текст
-          --import <path>:             # импортирует данные из TSV
-          --generator <n> <path> <url> # генерирует произвольное количество тестовых данных
+          --version:                                                                # выводит номер версии
+          --help:                                                                   # печатает этот текст
+          --import <path> <username> <password> <db-host> <port> <database-name>:   # импортирует данные из TSV
+          --generator <n> <path> <url>                                              # генерирует произвольное количество тестовых данных
     `);
   }
 

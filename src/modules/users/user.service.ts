@@ -5,6 +5,7 @@ import { UserEntity } from './user.model.js';
 import { UpdateUserDto } from './dto/update-user.dto.js';
 import CreateUserDto from './dto/create-user.dto.js';
 import { ApplicationComponent } from '../../types/application-component.type.js';
+import LoginUserDto from './dto/login-user.dto.js';
 
 
 @injectable()
@@ -53,5 +54,19 @@ export class UserService implements UserServiceInterface{
     const foundOffer: DocumentType<UserEntity> | null = await this.userModel.findById(documentId);
 
     return foundOffer !== null;
+  }
+
+  public async verifyUser(dto: LoginUserDto, salt: string): Promise<DocumentType<UserEntity> | null> {
+    const user = await this.findByEmail(dto.email);
+
+    if (! user) {
+      return null;
+    }
+
+    if (user.verifyPassword(dto.password, salt)) {
+      return user;
+    }
+
+    return null;
   }
 }

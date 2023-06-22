@@ -29,7 +29,6 @@ export default class MockOfferCreator{
     const previewImageSrc = getRandomItem(mockDataSource.imageSrc);
     const offerImageSrc = getRandomItems(mockDataSource.imageSrc).join(';');
     const isPremium = generateRandomValue(0, 1) === 1;
-    const isFavorite = generateRandomValue(0, 1) === 1;
     const rate = String(RATE_DEFAULT_VALUE);
     const estateType = getRandomItem(mockDataSource.estateType);
     const roomsQuantity = String(generateRandomValue(MIN_ROOMS_QUANTITY, MAX_ROOMS_QUANTITY));
@@ -50,7 +49,6 @@ export default class MockOfferCreator{
       previewImageSrc,
       offerImageSrc,
       isPremium,
-      isFavorite,
       rate,
       estateType,
       roomsQuantity,

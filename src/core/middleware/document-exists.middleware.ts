@@ -14,7 +14,7 @@ export class DocumentExistsMiddleware implements MiddlewareInterface {
     const documentId = params[this.paramName];
     if (!await this.service.exists(documentId)) {
       throw new HttpError(
-        401,
+        404,
         `${this.entityName} with ${documentId} not found.`,
         'DocumentExistsMiddleware'
       );
