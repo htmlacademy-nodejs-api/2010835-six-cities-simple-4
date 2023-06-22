@@ -20,6 +20,10 @@ type ParamsGetCommentsList = {
   offerId: string;
 }
 
+type ParamsOfferDetails = {
+  offerId: string;
+} | core.ParamsDictionary;
+
 @injectable()
 export default class CommentController extends ControllerAbstract {
   constructor(
@@ -33,8 +37,8 @@ export default class CommentController extends ControllerAbstract {
 
     this.addRoute('/:offerId', HttpMethod.GET, this.getCommentsList,
       [new ValidateObjectIdMiddleware('offerId'), new DocumentExistsMiddleware(this.offerService, 'Offer', 'offerId')]);
-    this.addRoute('/', HttpMethod.POST, this.create,
-      [new PrivateRouteMiddleware(), new PrivateRouteMiddleware(), new ValidateDtoMiddleware(CreateCommentDto)]);
+    this.addRoute('/:offerId', HttpMethod.POST, this.create,
+      [new PrivateRouteMiddleware(), new ValidateDtoMiddleware(CreateCommentDto), new ValidateObjectIdMiddleware('offerId'), new DocumentExistsMiddleware(this.offerService, 'Offer', 'offerId')]);
   }
 
   public async getCommentsList(
@@ -48,10 +52,10 @@ export default class CommentController extends ControllerAbstract {
   }
 
   public async create(
-    { body, user }: Request<Record<string, unknown>, Record<string, unknown>, CreateCommentDto>,
+    { params, body, user }: Request<ParamsOfferDetails, Record<string, unknown>, CreateCommentDto>,
     response: Response
   ): Promise<void> {
-    const { offerId } = body;
+    const { offerId } = params;
     const isAlreadyCommented = await this.commentService.isAlreadyCommented(offerId, user.id);
 
     if(isAlreadyCommented){
@@ -62,9 +66,9 @@ export default class CommentController extends ControllerAbstract {
       );
     }
 
-    const createdComment = await this.commentService.create({...body, userId: user.id});
+    const createdComment = await this.commentService.create({...body, userId: user.id}, offerId);
 
-    const updatedOffer = await this.offerService.incCommentCount(body.offerId, 1);
+    const updatedOffer = await this.offerService.incCommentCount(offerId, 1);
 
     if(updatedOffer){
       const rate = updatedOffer.rate + createdComment.rate;

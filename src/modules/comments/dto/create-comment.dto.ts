@@ -1,10 +1,8 @@
-import { IsInt, IsMongoId, IsString, Max, MaxLength, Min, MinLength } from 'class-validator';
+import { IsInt, IsString, Max, MaxLength, Min, MinLength } from 'class-validator';
 
 export default class CreateCommentDto {
   public userId!: string;
 
-  @IsMongoId({message: 'Field offerId must be valid Mongo id'})
-  public offerId!: string;
 
   @IsString({message: 'Field testContent must be type of string'})
   @MinLength(5, {message: 'Minimum comment length must be 5'})

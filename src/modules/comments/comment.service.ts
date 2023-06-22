@@ -19,8 +19,8 @@ export class CommentService implements CommentServiceInterface {
     return foundComments;
   }
 
-  public async create(comment: CreateCommentDto): Promise<DocumentType<CommentEntity>> {
-    const createdComment = (await this.commentModel.create(comment)).populate(['userId']);
+  public async create(comment: CreateCommentDto, offerId: string): Promise<DocumentType<CommentEntity>> {
+    const createdComment = (await this.commentModel.create({...comment, offerId: offerId})).populate(['userId']);
 
     return createdComment;
   }
