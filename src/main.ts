@@ -23,7 +23,9 @@ import { CommentService } from './modules/comments/comment.service.js';
 import CommentController from './modules/comments/comment.controller.js';
 import { CommentEntity, CommentModel } from './modules/comments/comment.model.js';
 import { ExceptionFilterInterface } from './core/exception-filters/exception-filter.interface.js';
-import ExceptionFilter from './core/exception-filters/exception-filter.js';
+import BaseExceptionFilter from './core/exception-filters/base-exception-filter.js';
+import ValidationExceptionFilter from './core/exception-filters/validation-exception-filter.js';
+import HttpErrorExceptionFilter from './core/exception-filters/http-error-exception-filter.js';
 
 
 async function bootstrap(){
@@ -33,10 +35,13 @@ async function bootstrap(){
   DIContainer.bind<ConfigInterface>(ApplicationComponent.ConfigService).to(ConfigService).inSingletonScope();
   DIContainer.bind<RestApplication>(ApplicationComponent.RestApplication).to(RestApplication).inSingletonScope();
   DIContainer.bind<DatabaseInterface>(ApplicationComponent.DatabaseInterface).to(DatabaseService).inSingletonScope();
-  DIContainer.bind<ExceptionFilterInterface>(ApplicationComponent.ExceptionFilterInterface).to(ExceptionFilter).inSingletonScope();
   DIContainer.bind<UserServiceInterface>(ApplicationComponent.UserServiceInterface).to(UserService).inSingletonScope();
   DIContainer.bind<OfferServiceInterface>(ApplicationComponent.OfferServiceInterface).to(OfferService).inSingletonScope();
   DIContainer.bind<CommentServiceInterface>(ApplicationComponent.CommentServiceInterface).to(CommentService).inSingletonScope();
+
+  DIContainer.bind<ExceptionFilterInterface>(ApplicationComponent.HttpErrorExceptionFilter).to(HttpErrorExceptionFilter).inSingletonScope();
+  DIContainer.bind<ExceptionFilterInterface>(ApplicationComponent.ValidationExceptionFilter).to(ValidationExceptionFilter).inSingletonScope();
+  DIContainer.bind<ExceptionFilterInterface>(ApplicationComponent.BaseExceptionFilter).to(BaseExceptionFilter).inSingletonScope();
 
 
   DIContainer.bind<types.ModelType<UserEntity>>(ApplicationComponent.UserModel).toConstantValue(UserModel);
