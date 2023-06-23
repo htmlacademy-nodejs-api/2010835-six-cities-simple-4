@@ -1,3 +1,4 @@
+import cors from 'cors';
 import { inject, injectable } from 'inversify';
 import { LoggerInterface } from '../modules/logger/logger.interface.js';
 import { ApplicationComponent } from '../types/application-component.type.js';
@@ -20,7 +21,9 @@ export class RestApplication {
     @inject(ApplicationComponent.UserController) private readonly userController: ControllerInterface,
     @inject(ApplicationComponent.OfferController) private readonly offerController: ControllerInterface,
     @inject(ApplicationComponent.CommentController) private readonly commentController: ControllerInterface,
-    @inject(ApplicationComponent.ExceptionFilterInterface) private readonly exceptionFilter: ExceptionFilterInterface
+    @inject(ApplicationComponent.HttpErrorExceptionFilter) private readonly httpErrorExceptionFilter: ExceptionFilterInterface,
+    @inject(ApplicationComponent.BaseExceptionFilter) private readonly baseExceptionFilter: ExceptionFilterInterface,
+    @inject(ApplicationComponent.ValidationExceptionFilter) private readonly validationExceptionFilter: ExceptionFilterInterface,
   ) {
     this.expressApplication = express();
   }
@@ -72,12 +75,15 @@ export class RestApplication {
     this.expressApplication.use('/upload', express.static(this.config.get('UPLOAD_DIRECTORY')));
     const authenticateMiddleware = new AuthenticateMiddleware(this.config.get('JWT_SECRET'));
     this.expressApplication.use(authenticateMiddleware.execute.bind(authenticateMiddleware));
+    this.expressApplication.use(cors());
     this.logger.info('Middleware initialization complete successfuly.');
   }
 
   private async initExceptionFilter(): Promise<void>{
     this.logger.info('Exception filters initialization');
-    this.expressApplication.use(this.exceptionFilter.catch.bind(this.exceptionFilter));
+    this.expressApplication.use(this.validationExceptionFilter.catch.bind(this.validationExceptionFilter));
+    this.expressApplication.use(this.httpErrorExceptionFilter.catch.bind(this.httpErrorExceptionFilter));
+    this.expressApplication.use(this.baseExceptionFilter.catch.bind(this.baseExceptionFilter));
     this.logger.info('Exception filters completed');
   }
 }

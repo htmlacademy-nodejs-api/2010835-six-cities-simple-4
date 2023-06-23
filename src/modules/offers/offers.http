@@ -10,7 +10,7 @@ content-type: application/json
 ##Создать предложение
 
 POST http://127.0.0.1:3102/offers HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImRhdmllLWpvbmVzQGZha2VtYWlsLmNvbSIsImlkIjoiNjQ5M2Y1MzAzZWU4NmY0OTExZjFhNGMwIiwiaWF0IjoxNjg3NDI2NDYwLCJleHAiOjE2ODc0MjczNjB9.DYfMpMUV6VHHZ9MsTHzuVlS3GbSwCxz5RMLwo3BtvNE
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImRhdmllLWpvbmVzQGZha2VtYWlsLmNvbSIsImlkIjoiNjQ5NDJiNzU1Yjc3ZDNhZTgwMGJjYmVhIiwiaWF0IjoxNjg3NDQ2NTkxLCJleHAiOjE2ODc0NDc0OTF9.NZxdplby0g4HwXIU3__muiczebb9aDttNWKPVzyeDmA
 content-type: application/json
 
 {
@@ -34,7 +34,7 @@ content-type: application/json
 ##Обновить данные предложения
 
 PATCH http://127.0.0.1:3102/offers/649415be59f21ae541f9ace2 HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImRhdmllLWpvbmVzQGZha2VtYWlsLmNvbSIsImlkIjoiNjQ5M2Y1MzAzZWU4NmY0OTExZjFhNGMwIiwiaWF0IjoxNjg3NDI2NDYwLCJleHAiOjE2ODc0MjczNjB9.DYfMpMUV6VHHZ9MsTHzuVlS3GbSwCxz5RMLwo3BtvNE
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImRhdmllLWpvbmVzQGZha2VtYWlsLmNvbSIsImlkIjoiNjQ5NDJiNzU1Yjc3ZDNhZTgwMGJjYmVhIiwiaWF0IjoxNjg3NDM4ODM5LCJleHAiOjE2ODc0Mzk3Mzl9.TBK_GNWMkDd8htcIiBsog5axMUPZ5RA8SC-VLDUrXds
 content-type: application/json
 
 {
@@ -51,8 +51,8 @@ GET http://localhost:3102/offers/6493dc28acbc42f796eafdee HTTP/1.1
 
 ##Удалить информацию о предложении
 
-DELETE  http://localhost:3102/offers/648d8d9d0e2eeeb17c393da6 HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImRhdmllLWpvbmVzQGZha2VtYWlsLmNvbSIsImlkIjoiNjQ5M2Y1MzAzZWU4NmY0OTExZjFhNGMwIiwiaWF0IjoxNjg3NDE4MTcyLCJleHAiOjE2ODc0MTkwNzJ9.sY2O2NShnXjo83fiT-hCVLveR6Vea9sH31UxGAm7sKw
+DELETE  http://localhost:3102/offers/64946453063c5d980e629e46 HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImRhdmllLWpvbmVzQGZha2VtYWlsLmNvbSIsImlkIjoiNjQ5NDJiNzU1Yjc3ZDNhZTgwMGJjYmVhIiwiaWF0IjoxNjg3NDUyMjA5LCJleHAiOjE2ODc0NTMxMDl9.D4klTKJiyHTdURYT_EwEKx68J8zSwHXW_NsDl32O1N4
 
 ###
 

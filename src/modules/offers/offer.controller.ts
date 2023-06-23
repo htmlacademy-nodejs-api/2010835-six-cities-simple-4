@@ -83,7 +83,9 @@ export class OfferController extends ControllerAbstract {
     const { offerId } = params;
 
     const foundOffer = await this.offerService.findById(offerId);
-    if(foundOffer?.userId?._id.toString() !== user.id){
+    const foundUser = foundOffer?.userId;
+
+    if(foundUser?._id.toString() !== user.id){
       throw new HttpError(
         409,
         `Offer with id ${offerId} not associated with user with id ${user.id}.`,
@@ -110,7 +112,9 @@ export class OfferController extends ControllerAbstract {
     const { offerId } = params;
 
     const foundOffer = await this.offerService.findById(offerId);
-    if(foundOffer?.userId?.toString() !== user.id){
+    const foundUser = foundOffer?.userId;
+
+    if(foundUser?._id.toString() !== user.id){
       throw new HttpError(
         409,
         `Offer with id ${offerId} not associated with user with id ${user.id}.`,

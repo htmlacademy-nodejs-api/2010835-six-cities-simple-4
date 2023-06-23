@@ -9,11 +9,11 @@ content-type: application/json
 
 ##Создать комментарий
 
-POST  http://127.0.0.1:3102/comments HTTP/1.1
+POST  http://127.0.0.1:3102/comments/64946453063c5d980e629e46 HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImRhdmllLWpvbmVzQGZha2VtYWlsLmNvbSIsImlkIjoiNjQ5NDJiNzU1Yjc3ZDNhZTgwMGJjYmVhIiwiaWF0IjoxNjg3NDUyMjA5LCJleHAiOjE2ODc0NTMxMDl9.D4klTKJiyHTdURYT_EwEKx68J8zSwHXW_NsDl32O1N4
 content-type: application/json
 
 {
-  "offerId": "648e3ddbdf519f968f00fc01",
   "textContent": "A quiet cozy and picturesque that hides behind a a river by the unique lightness of Amsterdam.",
   "rate": 3
 }
