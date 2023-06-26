@@ -18,6 +18,7 @@ import { ValidateObjectIdMiddleware } from '../../core/middleware/validate-objec
 import { ValidateDtoMiddleware } from '../../core/middleware/validate-dto.middleware.js';
 import { DocumentExistsMiddleware } from '../../core/middleware/document-exists.middleware.js';
 import { PrivateRouteMiddleware } from '../../core/middleware/private-route.middleware.js';
+import { DEFAULT_OFFER_LIST_LIMIT } from './offer.constants.js';
 
 type ParamsOfferDetails = {
   offerId: string;
@@ -58,7 +59,7 @@ export class OfferController extends ControllerAbstract {
     { query }: Request<Record<string, unknown>, Record<string, unknown>, Record<string, unknown>, QueryParamsOfferList>,
     response: Response
   ): Promise<void> {
-    const limit = Number(query.limit);
+    const limit = query.limit ? Number(query.limit) : DEFAULT_OFFER_LIST_LIMIT;
     const foundOffers = await this.offerService.findMany(limit);
     const responseData = fillDTOArray(OfferListRdo, foundOffers);
 

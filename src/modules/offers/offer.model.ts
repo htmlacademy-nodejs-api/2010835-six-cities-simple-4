@@ -2,6 +2,7 @@ import { defaultClasses, getModelForClass, modelOptions, prop, Ref } from '@type
 import { EstateType } from '../../types/estate-type.enum.js';
 import { UserEntity } from '../users/user.model.js';
 import { Location } from '../../types/location.type.js';
+import { DEFAULT_OFFER_COMMENT_QUANTITY, DEFAULT_OFFER_RATE } from './offer.constants.js';
 
 
 export interface OfferEntity extends defaultClasses.Base {}
@@ -36,7 +37,7 @@ export class OfferEntity extends defaultClasses.TimeStamps{
   @prop()
   public isPremium!: boolean;
 
-  @prop({default: 0})
+  @prop({default: DEFAULT_OFFER_RATE})
   public rate!: number;
 
   @prop()
@@ -54,7 +55,7 @@ export class OfferEntity extends defaultClasses.TimeStamps{
   @prop()
   public goods!: string[];
 
-  @prop({default: 0})
+  @prop({default: DEFAULT_OFFER_COMMENT_QUANTITY})
   public commentsQuantity!: number;
 
   @prop()

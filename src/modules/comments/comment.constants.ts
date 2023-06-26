@@ -1,0 +1,5 @@
+export const MINIMUM_COMMENT_LENGTH = 5;
+export const MAXIMUM_COMMENT_LENGTH = 1024;
+
+export const MINIMUM_COMMENT_RATE = 1;
+export const MAXIMUM_COMMENT_RATE = 5;
