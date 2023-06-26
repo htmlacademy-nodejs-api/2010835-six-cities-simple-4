@@ -6,7 +6,6 @@ import CreateOfferDto from './dto/create-offer.dto.js';
 import { OfferEntity } from './offer.model.js';
 import UpdateOfferDto from './dto/update-offer.dto.js';
 
-const DEFAULT_OFFER_LIMIT = 60;
 
 @injectable()
 export class OfferService implements OfferServiceInterface {
@@ -32,7 +31,7 @@ export class OfferService implements OfferServiceInterface {
     return deletedOffer;
   }
 
-  public async findMany(limit: number = DEFAULT_OFFER_LIMIT): Promise<DocumentType<OfferEntity>[]> {
+  public async findMany(limit: number): Promise<DocumentType<OfferEntity>[]> {
     const foundOffer = await this.offerModel.find().limit(limit).populate(['userId']);
 
     return foundOffer;
