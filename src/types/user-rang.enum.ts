@@ -1,4 +1,4 @@
 export enum UserRang {
-  DEFAULT = 'DEFAULT',
-  PRO = 'PRO',
+  DEFAULT = 'обычный',
+  PRO = 'pro',
 }
